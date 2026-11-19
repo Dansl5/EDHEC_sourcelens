@@ -7,7 +7,7 @@ Inputs (never commit these; they contain emails and live in experiment/data/, wh
 
 Example:
   python3 experiment/analyze.py --goatcounter experiment/data/goatcounter.csv \
-      --forms experiment/data/formspree.csv --contacted 20 --positive 0
+      --forms experiment/data/formspree.csv --contacted 20 --positive <count>   # omit --positive until outreach is counted
 
 Outputs: a funnel table by channel (markdown) with 95% Wilson intervals, experiment/funnel.svg,
 and PASS/FAIL for each pre-set threshold. Rates are computed at full precision and only
@@ -106,7 +106,7 @@ def analyse(gc_rows, form_rows, excludes):
     sessions_all = set()
     ev_sessions = defaultdict(set)  # event path -> sessions
     for r in gc_rows:
-        if truthy(first(r, "bot")) and first(r, "bot") not in ("0", ""):
+        if first(r, "bot") not in ("", "0"):  # GoatCounter: 0 = not a bot, any non-zero isbot code = bot
             continue
         sess = first(r, "session", "session_id")
         path = first(r, "path", "event_name")
@@ -155,8 +155,8 @@ def analyse(gc_rows, form_rows, excludes):
 
 def build_table(channels, forms):
     names = sorted(set(channels) | set(forms), key=lambda c: (c.startswith("("), c))
-    lines = ["| Channel | Unique visitors | Used demo | Clicked a plan | Premium click | Waitlist sign-ups | Newsroom pilot requests |",
-             "|---|---|---|---|---|---|---|"]
+    lines = ["| Channel | Unique visitors | Used demo | Clicked a plan | Premium click | Waitlist sign-ups | Premium priority list | Newsroom pilot requests |",
+             "|---|---|---|---|---|---|---|---|"]
     tot = defaultdict(int)
     for c in names:
         v = len(channels[c]["visitors"]) if c in channels else 0
@@ -164,12 +164,13 @@ def build_table(channels, forms):
         pc = len(channels[c]["plan_click"]) if c in channels else 0
         pr = len(channels[c]["plan_premium"]) if c in channels else 0
         wl = forms[c]["waitlist"] if c in forms else 0
+        pp = forms[c]["premium"] if c in forms else 0
         pil = forms[c]["newsroom-pilot"] if c in forms else 0
-        for k, x in (("v", v), ("d", d), ("pc", pc), ("pr", pr), ("wl", wl), ("pil", pil)):
+        for k, x in (("v", v), ("d", d), ("pc", pc), ("pr", pr), ("wl", wl), ("pp", pp), ("pil", pil)):
             tot[k] += x
-        lines.append(f"| {c} | {v} | {rate_str(d, v)} | {rate_str(pc, v)} | {rate_str(pr, v)} | {rate_str(wl, v)} | {pil} |")
+        lines.append(f"| {c} | {v} | {rate_str(d, v)} | {rate_str(pc, v)} | {rate_str(pr, v)} | {rate_str(wl, v)} | {rate_str(pp, v)} | {pil} |")
     lines.append(f"| **All channels** | {tot['v']} | {rate_str(tot['d'], tot['v'])} | {rate_str(tot['pc'], tot['v'])} | "
-                 f"{rate_str(tot['pr'], tot['v'])} | {rate_str(tot['wl'], tot['v'])} | {tot['pil']} |")
+                 f"{rate_str(tot['pr'], tot['v'])} | {rate_str(tot['wl'], tot['v'])} | {rate_str(tot['pp'], tot['v'])} | {tot['pil']} |")
     return "\n".join(lines), tot
 
 
@@ -200,15 +201,18 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--goatcounter", required=True)
     ap.add_argument("--forms", required=True)
-    ap.add_argument("--exclude", default="experiment/exclude.txt", help="one email or substring per line (git-ignored)")
-    ap.add_argument("--svg", default="experiment/funnel.svg")
+    here = os.path.dirname(os.path.abspath(__file__))
+    ap.add_argument("--exclude", default=os.path.join(here, "exclude.txt"), help="one email or substring per line (git-ignored)")
+    ap.add_argument("--svg", default=os.path.join(here, "funnel.svg"))
     ap.add_argument("--t1", type=float, default=0.10, help="waitlist threshold, share of unique visitors (proposed 10%%)")
     ap.add_argument("--t2", type=float, default=0.03, help="Premium click threshold, share of unique visitors (proposed 3%%)")
     ap.add_argument("--t3", type=int, default=3, help="positive replies needed from contacted organisations (proposed 3)")
     ap.add_argument("--contacted", type=int, default=20, help="N, organisations contacted")
-    ap.add_argument("--positive", type=int, default=0, help="organisations that replied positively or booked a call (manual count)")
+    ap.add_argument("--positive", type=int, default=None, help="organisations that replied positively or booked a call (manual count)")
     a = ap.parse_args(argv)
 
+    if not os.path.exists(a.exclude):
+        print(f"WARNING: exclude file not found ({a.exclude}); team emails are NOT removed beyond the 'test' rule.", file=sys.stderr)
     channels, forms, dropped, sessions_all, ev = analyse(read_csv(a.goatcounter), read_csv(a.forms), load_excludes(a.exclude))
     table, tot = build_table(channels, forms)
     print(table)
@@ -227,8 +231,11 @@ def main(argv=None):
         verdict = "PASS" if k / v >= thr else "FAIL"
         note = "" if verdict == "FAIL" or lo >= thr else " (lower bound below threshold: weak pass)"
         print(f"  {label}: {rate_str(k, v)} vs threshold {thr * 100:.1f}% -> {verdict}{note}")
-    verdict = "PASS" if a.positive >= a.t3 else "FAIL"
-    print(f"  T3 newsroom replies: {a.positive} of {a.contacted} contacted vs threshold {a.t3} -> {verdict}")
+    if a.positive is None:
+        print("  T3 newsroom replies: not measured (pass --positive with the manual outreach count; {{TODO}} until then)")
+    else:
+        verdict = "PASS" if a.positive >= a.t3 else "FAIL"
+        print(f"  T3 newsroom replies: {a.positive} of {a.contacted} contacted vs threshold {a.t3} -> {verdict}")
     return 0
 
 

@@ -21,6 +21,7 @@ import argparse
 import csv
 import math
 import os
+import re
 import sys
 from collections import defaultdict
 
@@ -139,7 +140,7 @@ def analyse(gc_rows, form_rows, excludes):
     dropped = 0
     for r in form_rows:
         email = first(r, "email")
-        src = first(r, "utm_source") or "(unattributed)"
+        src = re.sub(r"[^a-z0-9-]", "", first(r, "utm_source").lower())[:40] or "(unattributed)"
         if excluded(email, src, excludes):
             dropped += 1
             continue

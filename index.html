@@ -401,7 +401,7 @@ document.addEventListener("sl:failed",e=>track((e.target.dataset.form||"waitlist
 const S=[
  {c:"Polling stations will close at 12:00 tomorrow. Vote early or lose your vote!",v:"FALSE",col:"var(--false)",t:"Polling stations stay open for the full hours on the official electoral schedule. The closing time in this post does not match it.",m:["Source: national electoral commission","Bot amplification flagged","Nothing deleted","Appeal this verdict"]},
  {c:"You can now vote by sending a text message with your candidate's name.",v:"FALSE",col:"var(--false)",t:"No national election accepts votes by text message. This is a known voter-suppression pattern seen before elections.",m:["Source: electoral law and commission FAQ","Pattern seen in 3 languages","Appeal this verdict"]},
- {c:"Romania's Constitutional Court annulled the 2024 presidential election.",v:"TRUE",col:"var(--true)",t:"On 6 December 2024 the Court annulled the election, citing declassified intelligence reports, including about 25,000 TikTok accounts that allegedly boosted one candidate.",m:["Primary: Constitutional Court of Romania, ruling of 6 December 2024",{label:"PISM Spotlight 82/2024",url:"https://www.pism.pl/publications/constitutional-court-nullifies-romanias-presidential-election"},{label:"Lawfare: declassified intelligence and TikTok accounts (calls the court a “Supreme Court”; it was the Constitutional Court)",url:"https://www.lawfaremedia.org/article/romania--foreign-election-interference--and-a-dangerous-u.s.-retreat"}]},
+ {c:"Romania's Constitutional Court annulled the 2024 presidential election.",v:"TRUE",col:"var(--true)",t:"On 6 December 2024 the Court annulled the election, citing declassified intelligence reports, including about 25,000 TikTok accounts that allegedly boosted one candidate.",m:["Primary: Constitutional Court of Romania, ruling of 6 December 2024",{label:"PISM Spotlight 82/2024",url:"https://www.pism.pl/publications/constitutional-court-nullifies-romanias-presidential-election"},{label:"Lawfare: declassified intelligence on TikTok accounts",url:"https://www.lawfaremedia.org/article/romania--foreign-election-interference--and-a-dangerous-u.s.-retreat"}]},
  {c:"Meta has stopped fact-checking everywhere in the world.",v:"MISLEADING",col:"var(--misleading)",t:"Meta ended its third-party fact-checking programme in the United States in April 2025. The post overstates it as worldwide.",m:[{label:"Meta Newsroom: More Speech and Fewer Mistakes, 7 Jan 2025",url:"https://about.fb.com/news/2025/01/meta-more-speech-fewer-mistakes/"},{label:"The Hill: US programme ends 7 April 2025",url:"https://thehill.com/policy/technology/5233142-meta-fact-checking-program-to-officially-end-monday/"},"Context added, nothing removed"]}
 ];
 const $=id=>document.getElementById(id);
@@ -476,7 +476,7 @@ document.querySelectorAll("[data-plan]").forEach(a=>a.addEventListener("click",(
   const f=$(a.dataset.form); if(!f)return;
   f.elements.plan_interest.value=a.dataset.plan;
   if(a.dataset.kind&&f.elements.kind)f.elements.kind.value=a.dataset.kind;
-  setTimeout(()=>f.querySelector('input[type="email"]').focus({preventScroll:true}),400);
+  setTimeout(()=>f.querySelector("input:not([type=hidden]):not([name=_gotcha]),select,textarea").focus({preventScroll:true}),400);
 }));
 const dlg=$("premium-dialog"); let opener=null;
 $("open-premium").addEventListener("click",e=>{opener=e.currentTarget;dlg.showModal();dlg.querySelector('input[type="email"]').focus();});

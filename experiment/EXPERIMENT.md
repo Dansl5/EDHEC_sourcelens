@@ -30,12 +30,12 @@ Fake-door and waitlist test on the live page; six channels (linkedin, whatsapp, 
 By channel (visitors, sign-ups, Premium clicks, pilot requests): {{TODO: per-channel table from GoatCounter export and Formspree export}}
 
 ## 6. Qualitative evidence (role or age band, no names)
-| Quote | Who (role, age band) |
+| Quote (who: role, age band) | Quote (who: role, age band) |
 |---|---|
-| {{TODO: hallway quote 1}} | {{TODO: role, age band}} |
-| {{TODO: hallway quote 2}} | {{TODO: role, age band}} |
-| {{TODO: hallway quote 3}} | {{TODO: role, age band}} |
-| {{TODO: hallway quote 4}} | {{TODO: role, age band}} |
+| {{TODO: hallway quote 1}} ({{TODO: role, age band}}) | {{TODO: hallway quote 2}} ({{TODO: role, age band}}) |
+| {{TODO: hallway quote 3}} ({{TODO: role, age band}}) | {{TODO: hallway quote 4}} ({{TODO: role, age band}}) |
+| {{TODO: hallway quote 5}} ({{TODO: role, age band}}) | {{TODO: hallway quote 6}} ({{TODO: role, age band}}) |
+| {{TODO: hallway quote 7}} ({{TODO: role, age band}}) | {{TODO: hallway quote 8}} ({{TODO: role, age band}}) |
 
 ## 7. Insights
 - {{TODO: insight 1, tied to a number or quote}}

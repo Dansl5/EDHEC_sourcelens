@@ -1,0 +1,44 @@
+# SourceLens
+
+A "Shazam for political claims": paste a post, link or screenshot and get a sourced verdict (True, False, Misleading, Not yet verified). Nothing is deleted. This repository is the landing page and market-experiment kit for Team 11 B, EDHEC Foresight & Strategic Design (Homework 2). It is a student prototype; the demo verdicts are illustrative, not live fact-checks.
+
+**Live page:** https://dansl5.github.io/EDHEC_sourcelens/
+
+## Files
+
+| Path | What it is |
+|---|---|
+| `index.html` | The whole landing page (plain HTML, CSS and JS; no build step) |
+| `advisory.html` | War Game security advisory, a simulated crisis. Linked from the footer only |
+| `assets/` | Promo video, poster, favicon, link-preview card |
+| `experiment/` | Market experiment one-pager, tracking links, analysis script, hallway-test script |
+
+GitHub Pages serves the `main` branch from the repository root. Keep `.nojekyll`.
+
+## How to edit
+
+Edit the files and push to `main`; Pages redeploys in a minute or two. To test locally, run `python3 -m http.server` in this folder and open http://localhost:8000.
+
+### Configuration (top of the `<script>` in `index.html`)
+
+| Constant | Placeholder | Meaning |
+|---|---|---|
+| `FORM_ENDPOINT` | `https://formspree.io/f/{{FORM_ID}}` | Formspree form URL. Also set it in each `<form action>` (3 forms) |
+| `GOATCOUNTER_CODE` | `{{GOATCOUNTER_CODE}}` | GoatCounter site code |
+| `TEAM_EMAIL` | `{{TEAM_EMAIL}}` | Contact email, shown in the error message. The privacy notes contain the same token in the HTML |
+
+While any value still contains `{{`, the page is in **test mode**: forms do not send anything and show "Test mode: sign-ups are not being saved yet.", and analytics is not loaded. Replace the placeholders (search the repo for `{{`) before collecting data.
+
+## Where data lives
+
+- **Form submissions:** Formspree (waitlist, Premium fake door, newsroom pilot). Fields: `email`, `kind`, `plan_interest`, `utm_source`, `utm_medium`, `utm_campaign`, `page_variant`, `submitted_at`, `form_name`, plus the pilot form's `organisation`, `role`, `country`, `biggest_pain`. A hidden `_gotcha` field is a bot trap.
+- **Visitors and events:** GoatCounter (cookieless, no banner needed).
+- Credentials are never stored in this repository. Raw exports contain emails and must not be committed: `experiment/data/` is git-ignored.
+
+## Tracked events (GoatCounter)
+
+`cta-hero-waitlist`, `cta-hero-newsroom`, `demo-check`, `demo-chip-1` to `demo-chip-4`, `plan-click-citizen`, `plan-click-premium`, `plan-click-newsroom`, `plan-click-api`, `waitlist-submit-success`, `premium-submit-success`, `newsroom-pilot-submit`, `waitlist-submit-error` (any form), `video-play` (once per page view).
+
+## Experiment kit
+
+See `experiment/EXPERIMENT.md` (source of the one-pager), `experiment/links.md` (one tracking link per channel), `experiment/analyze.py` (funnel and Wilson intervals from the exports), `experiment/hallway-script.md`.

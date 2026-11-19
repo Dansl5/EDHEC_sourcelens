@@ -147,7 +147,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
         <div class="eyebrow" style="color:#e0a07e">Shazam for political claims</div>
         <h1 style="margin-top:12px">Know if it's true before you share it.</h1>
         <p class="lede">Paste a post, link or screenshot. SourceLens gives you a verdict in seconds, with the original source. Nothing is deleted and nobody decides what you may read.</p>
-        <div class="cta"><a class="btn primary" href="#waitlist">Join the free waitlist</a><a class="btn ghost" href="#pricing">Newsroom pilots</a></div>
+        <div class="cta"><a class="btn primary" href="#waitlist" data-track="cta-hero-waitlist">Join the free waitlist</a><a class="btn ghost" href="#pricing" data-track="cta-hero-newsroom">Newsroom pilots</a></div>
         <span class="tag">Independent · No government or party funding · Published method</span>
       </div>
 
@@ -155,12 +155,12 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
         <label for="claim">Try the checker</label>
         <textarea id="claim">Polling stations will close at 12:00 tomorrow. Vote early or lose your vote!</textarea>
         <div class="samples" aria-label="Sample claims">
-          <button class="chip" type="button" data-i="0">Polling hours</button>
-          <button class="chip" type="button" data-i="1">Vote by text</button>
-          <button class="chip" type="button" data-i="2">Romania 2024</button>
-          <button class="chip" type="button" data-i="3">Meta fact-checking</button>
+          <button class="chip" type="button" data-i="0" data-track="demo-chip-1">Polling hours</button>
+          <button class="chip" type="button" data-i="1" data-track="demo-chip-2">Vote by text</button>
+          <button class="chip" type="button" data-i="2" data-track="demo-chip-3">Romania 2024</button>
+          <button class="chip" type="button" data-i="3" data-track="demo-chip-4">Meta fact-checking</button>
         </div>
-        <button class="btn" id="check" type="button">Check this claim</button>
+        <button class="btn" id="check" type="button" data-track="demo-check">Check this claim</button>
         <div class="scan"><i id="bar"></i></div>
         <div class="verdict" id="out" hidden>
           <div class="vhead" id="vh"><span id="vlabel"></span><small id="vtime"></small></div>
@@ -251,6 +251,20 @@ const FORM_ENDPOINT="https://formspree.io/f/{{FORM_ID}}";
 const GOATCOUNTER_CODE="{{GOATCOUNTER_CODE}}";
 const TEAM_EMAIL="{{TEAM_EMAIL}}";
 const configured=v=>!v.includes("{{");
+
+/* Analytics: GoatCounter (cookieless). Loaded only when a site code is set; track() never throws and is a no-op if blocked. */
+if(configured(GOATCOUNTER_CODE)){
+  const g=document.createElement("script");
+  g.async=true; g.dataset.goatcounter="https://"+GOATCOUNTER_CODE+".goatcounter.com/count"; g.src="//gc.zgo.at/count.js";
+  document.head.appendChild(g);
+}
+function track(name){
+  try{ if(name&&window.goatcounter&&typeof window.goatcounter.count==="function")window.goatcounter.count({path:name,event:true}); }catch(e){}
+}
+document.addEventListener("click",e=>{const t=e.target.closest("[data-track]");if(t)track(t.dataset.track);});
+document.addEventListener("sl:submitted",e=>track(e.target.dataset.successEvent));
+document.addEventListener("sl:failed",()=>track("waitlist-submit-error"));
+(function(){const v=document.querySelector("video");if(v)v.addEventListener("play",()=>track("video-play"),{once:true});})();
 const S=[
  {c:"Polling stations will close at 12:00 tomorrow. Vote early or lose your vote!",v:"FALSE",col:"var(--false)",t:"Polling stations stay open for the full hours on the official electoral schedule. The closing time in this post does not match it.",m:["Source: national electoral commission","Bot amplification flagged","Nothing deleted","Appeal this verdict"]},
  {c:"You can now vote by sending a text message with your candidate's name.",v:"FALSE",col:"var(--false)",t:"No national election accepts votes by text message. This is a known voter-suppression pattern seen before elections.",m:["Source: electoral law and commission FAQ","Pattern seen in 3 languages","Appeal this verdict"]},

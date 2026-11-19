@@ -116,8 +116,13 @@ td.n{font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:700}
 /* waitlist */
 .wait{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
 .wait>*{min-width:0}
+.news{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:36px;align-items:start}
+.news>*{min-width:0}
+.news ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+.pilotcard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px}
+form textarea{resize:vertical;min-height:84px}
 form{display:flex;flex-direction:column;gap:10px}
-form input,form select{font:inherit;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+form input,form select,form textarea{font:inherit;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
 form .btn{background:var(--cta-bg);color:var(--cta-fg)}
 .thanks,.status.ok{font-weight:700;color:var(--true)}
 .status{min-height:1.4em;font-size:15px}
@@ -130,7 +135,7 @@ footer{border-top:1px solid var(--line);padding-block:28px;font-size:14px;color:
 footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
 @media (max-width:860px){
-  .hero,.video,.wait{grid-template-columns:1fr}
+  .hero,.video,.wait,.news{grid-template-columns:1fr}
   .grid3{grid-template-columns:1fr}
   .plans{grid-template-columns:1fr 1fr}
   .goal{grid-template-columns:1fr}
@@ -146,14 +151,14 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   <div class="wrap">
     <nav class="nav">
       <div class="logo">Source<span>Lens</span></div>
-      <div class="links"><a href="#demo">Demo</a><a href="#video">Video</a><a href="#pricing">Pricing</a><a href="#waitlist">Waitlist</a></div>
+      <div class="links"><a href="#demo">Demo</a><a href="#video">Video</a><a href="#pricing">Pricing</a><a href="#newsrooms">Newsrooms</a><a href="#waitlist">Waitlist</a></div>
     </nav>
     <div class="hero">
       <div>
         <div class="eyebrow" style="color:#e0a07e">Shazam for political claims</div>
         <h1 style="margin-top:12px">Know if it's true before you share it.</h1>
         <p class="lede">Paste a post, link or screenshot. SourceLens gives you a verdict in seconds, with the original source. Nothing is deleted and nobody decides what you may read.</p>
-        <div class="cta"><a class="btn primary" href="#waitlist" data-track="cta-hero-waitlist">Join the free waitlist</a><a class="btn ghost" href="#pricing" data-track="cta-hero-newsroom">Newsroom pilots</a></div>
+        <div class="cta"><a class="btn primary" href="#waitlist" data-track="cta-hero-waitlist">Join the free waitlist</a><a class="btn ghost" href="#newsrooms" data-track="cta-hero-newsroom">Newsroom pilots</a></div>
         <span class="tag">Independent · No government or party funding · Published method</span>
       </div>
 
@@ -219,6 +224,57 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
         <div class="plan"><span class="who">Platforms and apps</span><div class="price">API <small>per volume</small></div><ul><li>Same engine via API</li><li>Election monitoring package, fixed fee per election</li><li>Supports DSA risk work</li></ul><a class="btn" href="#newsrooms" data-plan="api" data-form="pilot" data-kind="Platform" data-track="plan-click-api">Talk to us about the API</a></div>
       </div>
       <p class="fine">Pilot pricing. Prices are hypotheses we are testing with a Van Westendorp survey. Only 17% of people pay for online news, so citizens stay free.</p>
+    </div>
+  </section>
+
+  <section id="newsrooms" style="padding-top:0">
+    <div class="wrap">
+      <div class="eyebrow">For newsrooms and fact-checkers</div>
+      <h2 style="margin-top:10px">Catch viral false claims in your region before they trend.</h2>
+      <div class="grid3">
+        <div class="benefit"><span class="pain">Pain: too many claims</span><h3>Know which claims to check first</h3><p>Checking every viral post by hand does not scale. Regional claim alerts point your team to the claims worth checking first.</p></div>
+        <div class="benefit"><span class="pain">Pain: slow sourcing</span><h3>The original source, attached</h3><p>Finding where a claim started eats the time you need to publish. Each verdict arrives with its source trail, ready to check and cite.</p></div>
+        <div class="benefit"><span class="pain">Pain: election peaks</span><h3>Ready before volume spikes</h3><p>Claim volume jumps around elections. Regional alerts and election monitoring help a small desk keep up.</p></div>
+      </div>
+      <div class="news">
+        <div class="stack">
+          <h3>What the pilot includes</h3>
+          <ul>
+            <li>Verification dashboard</li>
+            <li>Regional claim alerts</li>
+            <li>A concierge pilot: our team runs it by hand first, so you see the value before any integration</li>
+            <li>Election monitoring</li>
+          </ul>
+          <p class="note">Five pilot places are open. The pilot is free; you decide afterwards whether to continue.</p>
+        </div>
+        <div class="pilotcard">
+          <form id="pilot" action="https://formspree.io/f/{{FORM_ID}}" method="POST" data-form="newsroom-pilot" data-loading="Sending…" data-success="Thanks. We'll contact you about a pilot place." data-success-event="newsroom-pilot-submit">
+            <label for="org" class="eyebrow" style="color:var(--muted)">Organisation name</label>
+            <input id="org" name="organisation" type="text" required autocomplete="organization">
+            <label for="role" class="eyebrow" style="color:var(--muted)">Your role</label>
+            <input id="role" name="role" type="text" required autocomplete="organization-title">
+            <label for="wemail" class="eyebrow" style="color:var(--muted)">Work email</label>
+            <input id="wemail" name="email" type="email" required autocomplete="email" placeholder="you@yourorganisation.example">
+            <label for="country" class="eyebrow" style="color:var(--muted)">Country</label>
+            <input id="country" name="country" type="text" required autocomplete="country-name">
+            <label for="okind" class="eyebrow" style="color:var(--muted)">We are a</label>
+            <select id="okind" name="kind"><option value="Newsroom">Newsroom or fact-checker</option><option value="Platform">Platform or app (API)</option></select>
+            <label for="pain" class="eyebrow" style="color:var(--muted)">Biggest verification pain (short)</label>
+            <textarea id="pain" name="biggest_pain" maxlength="500"></textarea>
+        <input type="hidden" name="form_name" value="newsroom-pilot">
+        <input type="hidden" name="plan_interest" value="newsroom-pilot">
+        <input type="hidden" name="utm_source" value="">
+        <input type="hidden" name="utm_medium" value="">
+        <input type="hidden" name="utm_campaign" value="">
+        <input type="hidden" name="page_variant" value="v2">
+        <input type="hidden" name="submitted_at" value="">
+        <div class="hp"><label for="hp-pilot">Leave this empty</label><input id="hp-pilot" type="text" name="_gotcha" tabindex="-1" autocomplete="off"></div>
+            <button class="btn" type="submit">Request a free pilot</button>
+            <p class="status" role="status" aria-live="polite"></p>
+            <p class="privacy">We use cookieless analytics and store only what you give us, to contact you about the pilot. To have your details removed, write to {{TEAM_EMAIL}}.</p>
+          </form>
+        </div>
+      </div>
     </div>
   </section>
 

@@ -130,11 +130,6 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 </head>
 <body>
 
-<div role="alert" style="background-color:#d9534f;color:#ffffff;padding:12px max(16px, env(safe-area-inset-right, 0px)) 12px max(16px, env(safe-area-inset-left, 0px));text-align:center;font-family:var(--body);position:relative;z-index:9999;box-shadow:0 2px 4px rgba(0,0,0,0.2);font-size:16px;line-height:1.4">
-  <strong>🚨 SECURITY ADVISORY:</strong> Customer credentials leak detected.
-  <a href="#advisory" style="color:#ffffff;text-decoration:underline;font-weight:bold;margin-left:10px;display:inline-block">Read official announcement &amp; reset password &raquo;</a>
-</div>
-
 <header class="band">
   <div class="wrap">
     <nav class="nav">
@@ -176,58 +171,6 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
 
 <main>
-  <section id="advisory">
-    <style>
-      .adv{border:2px solid #d9534f;border-radius:16px;background:var(--card);padding:28px;display:flex;flex-direction:column;gap:18px}
-      .adv .eyebrow{color:#d9534f}
-      .adv-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-      .adv-grid>div{min-width:0;display:flex;flex-direction:column;gap:8px}
-      .adv ul,.adv ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
-      .adv .dated{font-size:14px;color:var(--muted)}
-      .plan4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-      .plan4>div{min-width:0;border-top:3px solid #d9534f;padding-top:12px;display:flex;flex-direction:column;gap:6px;font-size:15px}
-      .plan4 b{font-family:var(--display);font-size:18px}
-      .plan4 .when{font-size:12.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-      @media (max-width:860px){.adv-grid{grid-template-columns:1fr}.plan4{grid-template-columns:1fr 1fr}}
-      @media (max-width:520px){.plan4{grid-template-columns:1fr}}
-    </style>
-    <div class="wrap">
-      <div class="adv">
-        <div class="eyebrow">Official announcement · Security advisory</div>
-        <h2>Customer login credentials were leaked online</h2>
-        <p class="dated">Published 29 October 2026 · Updated as the investigation progresses</p>
-        <p>Today we learned that email addresses and passwords for some SourceLens accounts have been posted online. We have reset every account password as a precaution and are working with independent security experts to find out exactly which accounts are affected and how the data was obtained. Your fact-check history and the verdicts we publish remain unchanged. We are sorry. A service built on trust has to earn it back, and we will report openly on every step.</p>
-        <div class="adv-grid">
-          <div>
-            <h3>What you should do now</h3>
-            <ol>
-              <li>Set a new password the next time you open the app or extension.</li>
-              <li>Change your password on any other site where you used the same one.</li>
-              <li>Turn on two-step verification in your account settings.</li>
-              <li>Ignore emails or messages asking for your password. SourceLens will never ask for it.</li>
-            </ol>
-          </div>
-          <div>
-            <h3>Newsrooms and API customers</h3>
-            <ul>
-              <li>All API keys have been revoked. New keys are in your dashboard.</li>
-              <li>Review your dashboard access log for unfamiliar logins.</li>
-              <li>Your account manager will call you today.</li>
-            </ul>
-            <p class="dated">Questions: security@sourcelens.example</p>
-          </div>
-        </div>
-        <h3>What we are doing about it</h3>
-        <div class="plan4">
-          <div><span class="when">Done · 29 October</span><b>1. The leaked passwords no longer work</b>We reset every password and signed everyone out, so the leaked details no longer open any SourceLens account. We have also asked for the leaked list to be taken down.</div>
-          <div><span class="when">In progress · by 30 October</span><b>2. Finding out what happened</b>Independent security experts are checking how the details were exposed and which accounts are affected. We will fix the cause before anything else changes.</div>
-          <div><span class="when">By 1 November</span><b>3. Telling you and the authorities</b>If your account is affected, you will get an email from us. We are reporting the incident to the CNIL, the French data protection authority, as the law requires.</div>
-          <div><span class="when">By 26 November</span><b>4. Showing our work</b>We will publish a full report on this page: what happened, what we fixed and what we changed so it does not happen again. An independent audit will check it.</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <section id="video" style="padding-top:0">
     <div class="wrap video">
       <video controls muted playsinline preload="metadata" poster="assets/video-poster.png" aria-label="SourceLens 30-second promotional video">
@@ -286,7 +229,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   </section>
 </main>
 
-<footer><div class="wrap"><span>SourceLens · a market answer to destabilizing disinformation, without state control of speech</span><span>EDHEC Foresight &amp; Strategic Design · Cohort B prototype</span></div></footer>
+<footer><div class="wrap"><span>SourceLens · a market answer to destabilizing disinformation, without state control of speech</span><span>EDHEC Foresight &amp; Strategic Design · Cohort B prototype</span><a href="advisory.html">War Game: security advisory (simulation)</a></div></footer>
 
 <script>
 const S=[

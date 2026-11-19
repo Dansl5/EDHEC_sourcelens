@@ -40,6 +40,7 @@ a{color:inherit}
 .logo span{color:#e0a07e}
 .nav a{font-weight:600;font-size:15px;text-decoration:none;opacity:.85}
 .nav .links{display:flex;gap:22px;flex-wrap:wrap}
+.menu-btn{display:none;font:inherit;font-weight:700;font-size:15px;background:transparent;color:inherit;border:1px solid rgba(246,241,234,.45);border-radius:10px;padding:8px 14px;cursor:pointer}
 .hero{display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:center;padding-block:40px 64px}
 .hero>*{min-width:0}
 .hero h1{font-size:clamp(38px,5.6vw,60px)}
@@ -49,7 +50,7 @@ a{color:inherit}
 .btn{font:inherit;font-weight:700;border:0;border-radius:10px;padding:13px 20px;cursor:pointer;text-decoration:none;display:inline-block}
 .btn.primary{background:#c4693f;color:#fff}
 .btn.ghost{background:transparent;color:inherit;border:1px solid rgba(246,241,234,.45)}
-.btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #e0a07e;outline-offset:2px}
+.btn:focus-visible,.menu-btn:focus-visible,.nav a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #e0a07e;outline-offset:2px}
 
 /* demo */
 .demo{background:var(--card);color:var(--ink);border-radius:16px;padding:22px;box-shadow:0 24px 60px rgba(0,0,0,.28)}
@@ -141,7 +142,13 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   .goal{grid-template-columns:1fr}
   .tactics{grid-template-columns:1fr}
 }
-@media (max-width:520px){.plans{grid-template-columns:1fr} .nav .links{display:none}}
+@media (max-width:520px){
+  .plans{grid-template-columns:1fr}
+  .menu-btn{display:inline-block}
+  .nav .links{display:none;flex-direction:column;gap:0;width:100%}
+  .nav .links.open{display:flex}
+  .nav .links a{padding:13px 0;border-top:1px solid rgba(246,241,234,.2);font-size:17px;opacity:1}
+}
 @media (prefers-reduced-motion:reduce){.scan i{transition:none}}
 </style>
 </head>
@@ -151,7 +158,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   <div class="wrap">
     <nav class="nav">
       <div class="logo">Source<span>Lens</span></div>
-      <div class="links"><a href="#demo">Demo</a><a href="#video">Video</a><a href="#pricing">Pricing</a><a href="#newsrooms">Newsrooms</a><a href="#waitlist">Waitlist</a></div>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="navlinks">Menu</button>
+      <div class="links" id="navlinks"><a href="#demo">Demo</a><a href="#video">Video</a><a href="#pricing">Pricing</a><a href="#newsrooms">Newsrooms</a><a href="#waitlist">Waitlist</a></div>
     </nav>
     <div class="hero">
       <div>
@@ -415,6 +423,15 @@ async function submitForm(e){
   }
 }
 document.querySelectorAll("form[data-form]").forEach(f=>f.addEventListener("submit",submitForm));
+
+/* Mobile menu */
+(function(){
+  const btn=document.querySelector(".menu-btn"), links=$("navlinks");
+  const set=o=>{links.classList.toggle("open",o);btn.setAttribute("aria-expanded",String(o));btn.textContent=o?"Close":"Menu";};
+  btn.addEventListener("click",()=>set(!links.classList.contains("open")));
+  links.addEventListener("click",e=>{if(e.target.closest("a"))set(false);});
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&links.classList.contains("open")){set(false);btn.focus();}});
+})();
 
 /* Pricing CTAs. Plan buttons preselect the form they lead to. Premium is a fake door: an honest dialog, no payment fields. */
 document.querySelectorAll("[data-plan]").forEach(a=>a.addEventListener("click",()=>{

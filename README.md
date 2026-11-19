@@ -27,7 +27,7 @@ Edit the files and push to `main`; Pages redeploys in a minute or two. To test l
 | `GOATCOUNTER_CODE` | `{{GOATCOUNTER_CODE}}` | GoatCounter site code |
 | `TEAM_EMAIL` | `{{TEAM_EMAIL}}` | Contact email, shown in the error message. The privacy notes contain the same token in the HTML |
 
-While any value still contains `{{`, the page is in **test mode**: forms do not send anything and show "Test mode: sign-ups are not being saved yet.", and analytics is not loaded. Replace the placeholders (search the repo for `{{`) before collecting data.
+While `FORM_ENDPOINT` still contains `{{`, forms are in **test mode**: nothing is sent and they show "Test mode: sign-ups are not being saved yet." While `GOATCOUNTER_CODE` still contains `{{`, analytics is not loaded and no events are counted. `TEAM_EMAIL` gates nothing; it only appears in the error message and privacy notes. Replace the placeholders (search the repo for `{{`) before collecting data.
 
 ## Where data lives
 
@@ -37,7 +37,7 @@ While any value still contains `{{`, the page is in **test mode**: forms do not 
 
 ## Tracked events (GoatCounter)
 
-`cta-hero-waitlist`, `cta-hero-newsroom`, `demo-check`, `demo-chip-1` to `demo-chip-4`, `plan-click-citizen`, `plan-click-premium`, `plan-click-newsroom`, `plan-click-api`, `waitlist-submit-success`, `premium-submit-success`, `newsroom-pilot-submit`, `waitlist-submit-error` (any form), `video-play` (once per page view), `landing-<utm_source>` (once per page view when the link carries `utm_source`, e.g. `landing-linkedin`).
+`cta-hero-waitlist`, `cta-hero-newsroom`, `demo-check`, `demo-chip-1` to `demo-chip-4`, `plan-click-citizen`, `plan-click-premium`, `plan-click-newsroom`, `plan-click-api`, `waitlist-submit-success`, `premium-submit-success`, `newsroom-pilot-submit`, `waitlist-submit-error`, `premium-submit-error`, `newsroom-pilot-submit-error` (a failed submission, named after the form), `video-play` (once per page view), `landing-<utm_source>` (once per page view when the link carries `utm_source`, e.g. `landing-linkedin`).
 
 ## Experiment kit
 

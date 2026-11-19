@@ -33,6 +33,10 @@ def wilson(k, n, z=Z95):
     """95% Wilson score interval for k successes in n trials. Returns (low, high) or (None, None) if n == 0."""
     if n <= 0:
         return None, None
+    if k > n:
+        # Possible with real data: visitors who block analytics can still submit a form.
+        print(f"warning: {k} successes > {n} visitors (analytics undercount); interval capped at k = n", file=sys.stderr)
+        k = n
     p = k / n
     denom = 1 + z * z / n
     centre = (p + z * z / (2 * n)) / denom

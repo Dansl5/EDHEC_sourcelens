@@ -13,7 +13,7 @@
 Thresholds are proposed, {{TODO: team to confirm before 20 Nov}}.
 
 ## 3. Method
-Fake-door and waitlist test on the live page; six channels, each with its own tracking link; 6–8 hallway tests. A unique visitor is one GoatCounter session; team visits, tests and duplicate emails are excluded. Premium says "not live yet" and takes no payment.
+Fake-door and waitlist test on the live page; six channels (linkedin, whatsapp, instagram, edhec-cohort, newsroom-outreach, qr-hallway), each with its own tracking link; 6–8 hallway tests. A unique visitor is one GoatCounter session; team visits, tests and duplicate emails are excluded. Premium says "not live yet" and takes no payment.
 
 ## 4. Pass/fail rule (written before any data)
 **Metric that matters: share of unique visitors who join the waitlist (T1).** A threshold passes if the observed rate meets it; 95% Wilson intervals are shown. **Persevere:** T1 passes and T2 or T3 passes. **Adjust offer and price:** T1 passes, T2 and T3 fail. **Refocus on newsrooms:** T1 fails, T3 passes. **Pivot to platforms (API):** T1 and T3 fail.
@@ -30,12 +30,12 @@ Fake-door and waitlist test on the live page; six channels, each with its own tr
 By channel (visitors, sign-ups, Premium clicks, pilot requests): {{TODO: per-channel table from GoatCounter export and Formspree export}}
 
 ## 6. Qualitative evidence (role or age band, no names)
-| | |
+| Quote | Who (role, age band) |
 |---|---|
-| {{TODO: hallway quote 1}} | {{TODO: hallway quote 2}} |
-| {{TODO: hallway quote 3}} | {{TODO: hallway quote 4}} |
-| {{TODO: hallway quote 5}} | {{TODO: hallway quote 6}} |
-| {{TODO: hallway quote 7}} | {{TODO: hallway quote 8}} |
+| {{TODO: hallway quote 1}} | {{TODO: role, age band}} |
+| {{TODO: hallway quote 2}} | {{TODO: role, age band}} |
+| {{TODO: hallway quote 3}} | {{TODO: role, age band}} |
+| {{TODO: hallway quote 4}} | {{TODO: role, age band}} |
 
 ## 7. Insights
 - {{TODO: insight 1, tied to a number or quote}}

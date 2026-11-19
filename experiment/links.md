@@ -4,12 +4,12 @@ One link per channel. Each team member posts **only their own channel's link**, 
 
 | Channel | Link | Owner |
 |---|---|---|
-| linkedin | https://dansl5.github.io/EDHEC_sourcelens/?utm_source=linkedin&utm_medium=social&utm_campaign=hw2 | {{TODO: experiment owner / dates}} |
-| whatsapp | https://dansl5.github.io/EDHEC_sourcelens/?utm_source=whatsapp&utm_medium=social&utm_campaign=hw2 | {{TODO: experiment owner / dates}} |
-| instagram | https://dansl5.github.io/EDHEC_sourcelens/?utm_source=instagram&utm_medium=social&utm_campaign=hw2 | {{TODO: experiment owner / dates}} |
-| edhec-cohort | https://dansl5.github.io/EDHEC_sourcelens/?utm_source=edhec-cohort&utm_medium=community&utm_campaign=hw2 | {{TODO: experiment owner / dates}} |
-| newsroom-outreach | https://dansl5.github.io/EDHEC_sourcelens/?utm_source=newsroom-outreach&utm_medium=email&utm_campaign=hw2#newsrooms | {{TODO: experiment owner / dates}} |
-| qr-hallway | https://dansl5.github.io/EDHEC_sourcelens/?utm_source=qr-hallway&utm_medium=print&utm_campaign=hw2 | {{TODO: experiment owner / dates}} |
+| linkedin | https://dansl5.github.io/EDHEC_sourcelens/?utm_source=linkedin&utm_medium=social&utm_campaign=hw2 | {{TODO: channel owner}} |
+| whatsapp | https://dansl5.github.io/EDHEC_sourcelens/?utm_source=whatsapp&utm_medium=social&utm_campaign=hw2 | {{TODO: channel owner}} |
+| instagram | https://dansl5.github.io/EDHEC_sourcelens/?utm_source=instagram&utm_medium=social&utm_campaign=hw2 | {{TODO: channel owner}} |
+| edhec-cohort | https://dansl5.github.io/EDHEC_sourcelens/?utm_source=edhec-cohort&utm_medium=community&utm_campaign=hw2 | {{TODO: channel owner}} |
+| newsroom-outreach | https://dansl5.github.io/EDHEC_sourcelens/?utm_source=newsroom-outreach&utm_medium=email&utm_campaign=hw2#newsrooms | {{TODO: channel owner}} |
+| qr-hallway | https://dansl5.github.io/EDHEC_sourcelens/?utm_source=qr-hallway&utm_medium=print&utm_campaign=hw2 | {{TODO: channel owner}} |
 
 ## QR code for hallway tests
 

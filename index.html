@@ -12,15 +12,15 @@
 :root{
   --navy:#24324f; --ink:#1c2438; --paper:#f7f4ef; --card:#ffffff; --line:#e3ddd3;
   --terra:#c4693f; --sage:#6f8a5c; --false:#b5452f; --true:#3f7a4f; --muted:#5d6579;
-  --band:#24324f; --bandfg:#f6f1ea;
+  --band:#24324f; --bandfg:#f6f1ea; --cta-bg:#24324f; --cta-fg:#ffffff;
   --display:"Source Serif 4",Georgia,serif; --body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --ink:#ece7df; --paper:#141a28; --card:#1d2537; --line:#2e384f; --muted:#a3abbe;
-  --terra:#e08a5f; --sage:#9db588; --false:#e0735c; --true:#7cc18b; --band:#0f1522; --bandfg:#f6f1ea; color-scheme:dark}}
+  --terra:#e08a5f; --sage:#9db588; --false:#e0735c; --true:#7cc18b; --band:#0f1522; --bandfg:#f6f1ea; --cta-bg:#e08a5f; --cta-fg:#141a28; color-scheme:dark}}
 :root[data-theme="dark"]{
   --ink:#ece7df; --paper:#141a28; --card:#1d2537; --line:#2e384f; --muted:#a3abbe;
-  --terra:#e08a5f; --sage:#9db588; --false:#e0735c; --true:#7cc18b; --band:#0f1522; --bandfg:#f6f1ea; color-scheme:dark}
+  --terra:#e08a5f; --sage:#9db588; --false:#e0735c; --true:#7cc18b; --band:#0f1522; --bandfg:#f6f1ea; --cta-bg:#e08a5f; --cta-fg:#141a28; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55}
 .wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
@@ -89,7 +89,13 @@ video{width:100%;max-width:100%;border-radius:14px;display:block;background:#1d2
 .plan .price{font-family:var(--display);font-size:34px;font-weight:700;font-variant-numeric:tabular-nums}
 .plan .price small{font-family:var(--body);font-size:15px;font-weight:600;color:var(--muted)}
 .plan ul{margin:0;padding-left:18px;font-size:15px;display:flex;flex-direction:column;gap:4px}
+.plan .btn{margin-top:auto;text-align:center;background:var(--cta-bg);color:var(--cta-fg);padding:12px 14px}
 .fine{font-size:14px;color:var(--muted);margin-top:16px}
+dialog{border:1px solid var(--line);border-radius:16px;padding:0;background:var(--card);color:var(--ink);width:min(440px,calc(100vw - 32px));box-shadow:0 24px 60px rgba(0,0,0,.35)}
+dialog::backdrop{background:rgba(10,14,24,.6)}
+dialog .inner{padding:24px;display:flex;flex-direction:column;gap:12px}
+dialog .row{display:flex;gap:10px;flex-wrap:wrap}
+dialog .btn.quiet{background:transparent;color:var(--ink);border:1px solid var(--line)}
 
 /* plan */
 .goal{background:var(--band);color:var(--bandfg);border-radius:16px;padding:28px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;margin-top:28px}
@@ -112,7 +118,7 @@ td.n{font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:700}
 .wait>*{min-width:0}
 form{display:flex;flex-direction:column;gap:10px}
 form input,form select{font:inherit;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
-form .btn{background:#c4693f;color:#fff}
+form .btn{background:var(--cta-bg);color:var(--cta-fg)}
 .thanks,.status.ok{font-weight:700;color:var(--true)}
 .status{min-height:1.4em;font-size:15px}
 .status.err{font-weight:700;color:var(--false)}
@@ -207,10 +213,10 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       <div class="eyebrow">Pricing</div>
       <h2 style="margin-top:10px">Free for citizens. Organisations that verify at scale pay.</h2>
       <div class="plans">
-        <div class="plan"><span class="who">Citizens</span><div class="price">€0</div><ul><li>App and browser extension</li><li>Instant checks and pre-share warnings</li><li>Shareable verdict cards</li></ul></div>
-        <div class="plan"><span class="who">Premium</span><div class="price">€3.99 <small>/ month</small></div><ul><li>30-day free trial</li><li>Unlimited checks and history</li><li>"Trusted sharer" badge</li></ul></div>
-        <div class="plan feat"><span class="who">Newsrooms</span><div class="price">€300–1,000 <small>/ month</small></div><ul><li>Verification dashboard</li><li>Claim alerts for your region</li><li>Free concierge pilot first</li></ul></div>
-        <div class="plan"><span class="who">Platforms and apps</span><div class="price">API <small>per volume</small></div><ul><li>Same engine via API</li><li>Election monitoring package, fixed fee per election</li><li>Supports DSA risk work</li></ul></div>
+        <div class="plan"><span class="who">Citizens</span><div class="price">€0</div><ul><li>App and browser extension</li><li>Instant checks and pre-share warnings</li><li>Shareable verdict cards</li></ul><a class="btn" href="#waitlist" data-plan="citizen" data-form="wl" data-kind="Citizen" data-track="plan-click-citizen">Join free</a></div>
+        <div class="plan"><span class="who">Premium</span><div class="price">€3.99 <small>/ month</small></div><ul><li>30-day free trial</li><li>Unlimited checks and history</li><li>"Trusted sharer" badge</li></ul><button class="btn" type="button" id="open-premium" data-track="plan-click-premium">Start 30-day free trial</button></div>
+        <div class="plan feat"><span class="who">Newsrooms</span><div class="price">€300–1,000 <small>/ month</small></div><ul><li>Verification dashboard</li><li>Claim alerts for your region</li><li>Free concierge pilot first</li></ul><a class="btn" href="#newsrooms" data-plan="newsroom-pilot" data-form="pilot" data-kind="Newsroom" data-track="plan-click-newsroom">Request a free pilot</a></div>
+        <div class="plan"><span class="who">Platforms and apps</span><div class="price">API <small>per volume</small></div><ul><li>Same engine via API</li><li>Election monitoring package, fixed fee per election</li><li>Supports DSA risk work</li></ul><a class="btn" href="#newsrooms" data-plan="api" data-form="pilot" data-kind="Platform" data-track="plan-click-api">Talk to us about the API</a></div>
       </div>
       <p class="fine">Pilot pricing. Prices are hypotheses we are testing with a Van Westendorp survey. Only 17% of people pay for online news, so citizens stay free.</p>
     </div>
@@ -245,6 +251,29 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 </main>
 
 <footer><div class="wrap"><span>SourceLens · a market answer to destabilizing disinformation, without state control of speech</span><span>EDHEC Foresight &amp; Strategic Design · Cohort B prototype</span><a href="advisory.html">War Game: security advisory (simulation)</a></div></footer>
+
+<dialog id="premium-dialog" aria-labelledby="pd-title">
+  <div class="inner">
+    <h3 id="pd-title">Premium isn't live yet</h3>
+    <p>Premium isn't live yet. Join the priority list and get your free trial first. We don't ask for payment details and nothing is charged.</p>
+    <form data-form="premium" action="https://formspree.io/f/{{FORM_ID}}" method="POST" data-success="You're on the priority list. We'll email you when Premium opens." data-success-event="premium-submit-success">
+      <label for="pd-email" class="eyebrow" style="color:var(--muted)">Email</label>
+      <input id="pd-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
+      <input type="hidden" name="kind" value="Citizen">
+      <input type="hidden" name="form_name" value="premium">
+      <input type="hidden" name="plan_interest" value="premium">
+      <input type="hidden" name="utm_source" value="">
+      <input type="hidden" name="utm_medium" value="">
+      <input type="hidden" name="utm_campaign" value="">
+      <input type="hidden" name="page_variant" value="v2">
+      <input type="hidden" name="submitted_at" value="">
+      <div class="hp"><label for="hp-premium">Leave this empty</label><input id="hp-premium" type="text" name="_gotcha" tabindex="-1" autocomplete="off"></div>
+      <div class="row"><button class="btn" type="submit">Join the priority list</button><button class="btn quiet" type="button" data-close>Close</button></div>
+      <p class="status" role="status" aria-live="polite"></p>
+      <p class="privacy">We use cookieless analytics and store only the email you give us, to contact you about access. To have your email removed, write to {{TEAM_EMAIL}}.</p>
+    </form>
+  </div>
+</dialog>
 
 <script>
 const FORM_ENDPOINT="https://formspree.io/f/{{FORM_ID}}";
@@ -317,6 +346,19 @@ async function submitForm(e){
   }
 }
 document.querySelectorAll("form[data-form]").forEach(f=>f.addEventListener("submit",submitForm));
+
+/* Pricing CTAs. Plan buttons preselect the form they lead to. Premium is a fake door: an honest dialog, no payment fields. */
+document.querySelectorAll("[data-plan]").forEach(a=>a.addEventListener("click",()=>{
+  const f=$(a.dataset.form); if(!f)return;
+  f.elements.plan_interest.value=a.dataset.plan;
+  if(a.dataset.kind&&f.elements.kind)f.elements.kind.value=a.dataset.kind;
+  setTimeout(()=>f.querySelector('input[type="email"]').focus({preventScroll:true}),400);
+}));
+const dlg=$("premium-dialog"); let opener=null;
+$("open-premium").addEventListener("click",e=>{opener=e.currentTarget;dlg.showModal();dlg.querySelector('input[type="email"]').focus();});
+dlg.querySelector("[data-close]").addEventListener("click",()=>dlg.close());
+dlg.addEventListener("click",e=>{if(e.target===dlg)dlg.close();});
+dlg.addEventListener("close",()=>{if(opener)opener.focus();});
 </script>
 </body>
 </html>

@@ -68,7 +68,9 @@ a{color:inherit}
 .vhead small{font-weight:600;letter-spacing:0;opacity:.9}
 .vbody{padding:12px 14px;display:flex;flex-direction:column;gap:8px;font-size:15px}
 .meta{display:flex;flex-wrap:wrap;gap:6px}
-.meta span{font-size:12.5px;background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:3px 10px}
+.meta span,.meta a{font-size:12.5px;background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:3px 10px}
+.meta a{color:var(--ink);text-decoration:underline;text-underline-offset:2px}
+.meta a:focus-visible{outline:3px solid var(--terra);outline-offset:2px}
 .note{font-size:12.5px;color:var(--muted);margin-top:10px}
 
 /* video */
@@ -231,7 +233,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
         <div class="plan feat"><span class="who">Newsrooms</span><div class="price">€300–1,000 <small>/ month</small></div><ul><li>Verification dashboard</li><li>Claim alerts for your region</li><li>Free concierge pilot first</li></ul><a class="btn" href="#newsrooms" data-plan="newsroom-pilot" data-form="pilot" data-kind="Newsroom" data-track="plan-click-newsroom">Request a free pilot</a></div>
         <div class="plan"><span class="who">Platforms and apps</span><div class="price">API <small>per volume</small></div><ul><li>Same engine via API</li><li>Election monitoring package, fixed fee per election</li><li>Supports DSA risk work</li></ul><a class="btn" href="#newsrooms" data-plan="api" data-form="pilot" data-kind="Platform" data-track="plan-click-api">Talk to us about the API</a></div>
       </div>
-      <p class="fine">Pilot pricing. Prices are hypotheses we are testing with a Van Westendorp survey. Only 17% of people pay for online news, so citizens stay free.</p>
+      <p class="fine">Pilot pricing. Prices are hypotheses we are testing with a Van Westendorp survey. Only 17% of people across 20 countries pay for online news (<a href="https://reutersinstitute.politics.ox.ac.uk/digital-news-report/2026/dnr-executive-summary" target="_blank" rel="noopener">Reuters Institute Digital News Report 2026</a>), so citizens stay free.</p>
     </div>
   </section>
 
@@ -374,8 +376,8 @@ document.addEventListener("sl:failed",()=>track("waitlist-submit-error"));
 const S=[
  {c:"Polling stations will close at 12:00 tomorrow. Vote early or lose your vote!",v:"FALSE",col:"var(--false)",t:"Polling stations stay open for the full hours on the official electoral schedule. The closing time in this post does not match it.",m:["Source: national electoral commission","Bot amplification flagged","Nothing deleted","Appeal this verdict"]},
  {c:"You can now vote by sending a text message with your candidate's name.",v:"FALSE",col:"var(--false)",t:"No national election accepts votes by text message. This is a known voter-suppression pattern seen before elections.",m:["Source: electoral law and commission FAQ","Pattern seen in 3 languages","Appeal this verdict"]},
- {c:"Romania's Constitutional Court annulled the 2024 presidential election.",v:"TRUE",col:"var(--true)",t:"On 6 December 2024 the Court annulled the election, citing intelligence reports on about 25,000 paid TikTok accounts.",m:["Source: PISM Spotlight 82/2024","Primary: Constitutional Court ruling"]},
- {c:"Meta has stopped fact-checking everywhere in the world.",v:"MISLEADING",col:"var(--terra)",t:"Meta ended its third-party fact-checking programme in the United States in April 2025. The post overstates it as worldwide.",m:["Source: PPC Land, 6 April 2025","Context added, nothing removed"]}
+ {c:"Romania's Constitutional Court annulled the 2024 presidential election.",v:"TRUE",col:"var(--true)",t:"On 6 December 2024 the Court annulled the election, citing declassified intelligence reports, including about 25,000 TikTok accounts that allegedly boosted one candidate.",m:["Primary: Constitutional Court of Romania, ruling of 6 December 2024",{label:"PISM Spotlight 82/2024",url:"https://www.pism.pl/publications/constitutional-court-nullifies-romanias-presidential-election"},{label:"Lawfare: declassified intelligence and TikTok accounts",url:"https://www.lawfaremedia.org/article/romania--foreign-election-interference--and-a-dangerous-u.s.-retreat"}]},
+ {c:"Meta has stopped fact-checking everywhere in the world.",v:"MISLEADING",col:"var(--terra)",t:"Meta ended its third-party fact-checking programme in the United States in April 2025. The post overstates it as worldwide.",m:[{label:"Meta Newsroom: More Speech and Fewer Mistakes, 7 Jan 2025",url:"https://about.fb.com/news/2025/01/meta-more-speech-fewer-mistakes/"},{label:"The Hill: US programme ends 7 April 2025",url:"https://thehill.com/policy/technology/5233142-meta-fact-checking-program-to-officially-end-monday/"},"Context added, nothing removed"]}
 ];
 const $=id=>document.getElementById(id);
 document.querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{$("claim").value=S[+b.dataset.i].c;run();}));
@@ -387,13 +389,23 @@ function pick(txt){
   if(s.includes("poll")||s.includes("close"))return S[0];
   return null;
 }
+function renderMeta(items){
+  const box=$("vmeta"); box.textContent="";
+  items.forEach(x=>{
+    const o=typeof x==="string"?{label:x}:x;
+    const el=document.createElement(o.url?"a":"span");
+    el.textContent=o.label;
+    if(o.url){el.href=o.url;el.target="_blank";el.rel="noopener";}
+    box.appendChild(el);
+  });
+}
 function run(){
   const r=pick($("claim").value);
   $("out").hidden=true; $("bar").style.width="0";
   requestAnimationFrame(()=>{$("bar").style.width="100%";});
   setTimeout(()=>{
-    if(r){$("vlabel").textContent=r.v;$("vh").style.background=r.col;$("vtext").textContent=r.t;$("vmeta").innerHTML=r.m.map(x=>"<span>"+x+"</span>").join("");}
-    else{$("vlabel").textContent="NOT YET VERIFIED";$("vh").style.background="var(--muted)";$("vtext").textContent="No sourced verdict exists for this claim yet. In the full product it goes to our fact-checking partners and you get notified.";$("vmeta").innerHTML="<span>Sent to partner review</span><span>Nothing deleted</span>";}
+    if(r){$("vlabel").textContent=r.v;$("vh").style.background=r.col;$("vtext").textContent=r.t;renderMeta(r.m);}
+    else{$("vlabel").textContent="NOT YET VERIFIED";$("vh").style.background="var(--muted)";$("vtext").textContent="No sourced verdict exists for this claim yet. In the full product it goes to our fact-checking partners and you get notified.";renderMeta(["Sent to partner review","Nothing deleted"]);}
     $("vtime").textContent="checked in "+(1.8+Math.random()*1.2).toFixed(1)+" s";
     $("out").hidden=false;
   },1450);

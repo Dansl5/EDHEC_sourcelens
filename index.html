@@ -1,5 +1,9 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>SourceLens</title>
-<meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="SourceLens: know if a political post is true before you share it.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=Source+Sans+3:wght@400;600;700&display=swap">
@@ -123,6 +127,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 @media (max-width:520px){.plans{grid-template-columns:1fr} .nav .links{display:none}}
 @media (prefers-reduced-motion:reduce){.scan i{transition:none}}
 </style>
+</head>
+<body>
 
 <div role="alert" style="background-color:#d9534f;color:#ffffff;padding:12px max(16px, env(safe-area-inset-right, 0px)) 12px max(16px, env(safe-area-inset-left, 0px));text-align:center;font-family:var(--body);position:relative;z-index:9999;box-shadow:0 2px 4px rgba(0,0,0,0.2);font-size:16px;line-height:1.4">
   <strong>🚨 SECURITY ADVISORY:</strong> Customer credentials leak detected.
@@ -313,3 +319,5 @@ function run(){
 $("check").addEventListener("click",run);
 $("wl").addEventListener("submit",e=>{e.preventDefault();$("thanks").hidden=false;e.target.querySelector("button").disabled=true;});
 </script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+# Copy to experiment/exclude.txt (git-ignored) and list team members' emails or email fragments, one per line.
+# analyze.py also drops any email containing "test" and any row with utm_source=test.
+# Examples (not real addresses):
+# teammate1@example.org
+# @your-school-domain.example

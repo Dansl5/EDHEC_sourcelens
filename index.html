@@ -19,20 +19,21 @@
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=Source+Sans+3:wght@400;600;700&display=swap">
+<script>document.documentElement.classList.add("js")</script>
 <style>
 /* Layout: one column, navy masthead band with the live checker as the hero, then video, benefits, pricing, launch plan */
 :root{
   --navy:#24324f; --ink:#1c2438; --paper:#f7f4ef; --card:#ffffff; --line:#e3ddd3;
-  --terra:#c4693f; --sage:#6f8a5c; --false:#b5452f; --true:#3f7a4f; --muted:#5d6579;
+  --terra:#c4693f; --misleading:#a8552f; --focus:#24324f; --sage:#6f8a5c; --false:#b5452f; --true:#3f7a4f; --muted:#5d6579;
   --band:#24324f; --bandfg:#f6f1ea; --cta-bg:#24324f; --cta-fg:#ffffff;
   --display:"Source Serif 4",Georgia,serif; --body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --ink:#ece7df; --paper:#141a28; --card:#1d2537; --line:#2e384f; --muted:#a3abbe;
-  --terra:#e08a5f; --sage:#9db588; --false:#e0735c; --true:#7cc18b; --band:#0f1522; --bandfg:#f6f1ea; --cta-bg:#e08a5f; --cta-fg:#141a28; color-scheme:dark}}
+  --terra:#e08a5f; --misleading:#e08a5f; --focus:#e0a07e; --vhfg:#141a28; --sage:#9db588; --false:#e0735c; --true:#7cc18b; --band:#0f1522; --bandfg:#f6f1ea; --cta-bg:#e08a5f; --cta-fg:#141a28; color-scheme:dark}}
 :root[data-theme="dark"]{
   --ink:#ece7df; --paper:#141a28; --card:#1d2537; --line:#2e384f; --muted:#a3abbe;
-  --terra:#e08a5f; --sage:#9db588; --false:#e0735c; --true:#7cc18b; --band:#0f1522; --bandfg:#f6f1ea; --cta-bg:#e08a5f; --cta-fg:#141a28; color-scheme:dark}
+  --terra:#e08a5f; --misleading:#e08a5f; --focus:#e0a07e; --vhfg:#141a28; --sage:#9db588; --false:#e0735c; --true:#7cc18b; --band:#0f1522; --bandfg:#f6f1ea; --cta-bg:#e08a5f; --cta-fg:#141a28; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55}
 .wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
@@ -62,7 +63,8 @@ a{color:inherit}
 .btn{font:inherit;font-weight:700;border:0;border-radius:10px;padding:13px 20px;cursor:pointer;text-decoration:none;display:inline-block}
 .btn.primary{background:#c4693f;color:#fff}
 .btn.ghost{background:transparent;color:inherit;border:1px solid rgba(246,241,234,.45)}
-.btn:focus-visible,.menu-btn:focus-visible,.nav a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #e0a07e;outline-offset:2px}
+.btn:focus-visible,.menu-btn:focus-visible,.nav a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.band .nav a:focus-visible,.band .menu-btn:focus-visible,.band .cta .btn:focus-visible{outline-color:#e0a07e}
 
 /* demo */
 .demo{background:var(--card);color:var(--ink);border-radius:16px;padding:22px;box-shadow:0 24px 60px rgba(0,0,0,.28)}
@@ -76,8 +78,8 @@ a{color:inherit}
 .scan{height:4px;border-radius:4px;background:var(--line);overflow:hidden;margin-top:14px}
 .scan i{display:block;height:100%;width:0;background:var(--terra);transition:width 1.4s ease}
 .verdict{margin-top:14px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
-.vhead{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;color:#fff;font-weight:700;letter-spacing:.04em}
-.vhead small{font-weight:600;letter-spacing:0;opacity:.9}
+.vhead{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;color:var(--vhfg,#fff);font-weight:700;letter-spacing:.04em}
+.vhead small{font-weight:600;letter-spacing:0}
 .vbody{padding:12px 14px;display:flex;flex-direction:column;gap:8px;font-size:15px}
 .meta{display:flex;flex-wrap:wrap;gap:6px}
 .meta span,.meta a{font-size:12.5px;background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:3px 10px}
@@ -158,9 +160,10 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 }
 @media (max-width:520px){
   .plans{grid-template-columns:1fr}
-  .menu-btn{display:inline-block}
-  .nav .links{display:none;flex-direction:column;gap:0;width:100%}
-  .nav .links.open{display:flex}
+  .js .menu-btn{display:inline-block}
+  .nav .links{flex-direction:column;gap:0;width:100%}
+  .js .nav .links{display:none}
+  .js .nav .links.open{display:flex}
   .nav .links a{padding:13px 0;border-top:1px solid rgba(246,241,234,.2);font-size:17px;opacity:1}
 }
 @media (prefers-reduced-motion:reduce){.scan i{transition:none}}
@@ -180,7 +183,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
         <div class="eyebrow" style="color:#e0a07e">Shazam for political claims</div>
         <h1 style="margin-top:12px">Know if it's true before you share it.</h1>
         <p class="lede">Paste a post, link or screenshot. SourceLens gives you a verdict in seconds, with the original source. Nothing is deleted and nobody decides what you may read.</p>
-        <div class="cta"><a class="btn primary" href="#waitlist" data-track="cta-hero-waitlist">Join the free waitlist</a><a class="btn ghost" href="#newsrooms" data-track="cta-hero-newsroom">Newsroom pilots</a></div>
+        <div class="cta"><a class="btn primary" href="#waitlist" data-track="cta-hero-waitlist">Join the free waitlist</a><a class="btn ghost" href="#newsrooms" data-track="cta-hero-newsroom" data-plan="newsroom-pilot" data-form="pilot" data-kind="Newsroom">Newsroom pilots</a></div>
         <span class="tag">Independent · No government or party funding · Published method</span>
       </div>
 
@@ -346,7 +349,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 <dialog id="premium-dialog" aria-labelledby="pd-title">
   <div class="inner">
     <h3 id="pd-title">Premium isn't live yet</h3>
-    <p>Premium isn't live yet. Join the priority list and get your free trial first. We don't ask for payment details and nothing is charged.</p>
+    <p>Join the priority list and get your free trial first. We don't ask for payment details and nothing is charged.</p>
     <form data-form="premium" action="https://formspree.io/f/{{FORM_ID}}" method="POST" data-success="You're on the priority list. We'll email you when Premium opens." data-success-event="premium-submit-success">
       <label for="pd-email" class="eyebrow" style="color:var(--muted)">Email</label>
       <input id="pd-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
@@ -376,14 +379,20 @@ const configured=v=>!v.includes("{{");
 if(configured(GOATCOUNTER_CODE)){
   const g=document.createElement("script");
   g.async=true; g.dataset.goatcounter="https://"+GOATCOUNTER_CODE+".goatcounter.com/count"; g.src="//gc.zgo.at/count.js";
+  g.addEventListener("load",()=>{gcReady=true;while(gcQueue.length)send(gcQueue.shift());});
   document.head.appendChild(g);
 }
-function track(name){
+let gcReady=false; const gcQueue=[];
+function send(name){
   try{ if(name&&window.goatcounter&&typeof window.goatcounter.count==="function")window.goatcounter.count({path:name,event:true}); }catch(e){}
+}
+function track(name){
+  if(!name||!configured(GOATCOUNTER_CODE))return;
+  if(gcReady)send(name); else gcQueue.push(name); /* count.js loads async: queue until it is ready, then flush */
 }
 document.addEventListener("click",e=>{const t=e.target.closest("[data-track]");if(t)track(t.dataset.track);});
 document.addEventListener("sl:submitted",e=>track(e.target.dataset.successEvent));
-document.addEventListener("sl:failed",()=>track("waitlist-submit-error"));
+document.addEventListener("sl:failed",e=>track((e.target.dataset.form||"waitlist")+"-submit-error"));
 (function(){ /* one event per page view naming the landing channel, so GoatCounter can count unique visitors per link */
   const src=(new URLSearchParams(location.search).get("utm_source")||"").toLowerCase().replace(/[^a-z0-9-]/g,"").slice(0,40);
   if(src)track("landing-"+src);
@@ -392,8 +401,8 @@ document.addEventListener("sl:failed",()=>track("waitlist-submit-error"));
 const S=[
  {c:"Polling stations will close at 12:00 tomorrow. Vote early or lose your vote!",v:"FALSE",col:"var(--false)",t:"Polling stations stay open for the full hours on the official electoral schedule. The closing time in this post does not match it.",m:["Source: national electoral commission","Bot amplification flagged","Nothing deleted","Appeal this verdict"]},
  {c:"You can now vote by sending a text message with your candidate's name.",v:"FALSE",col:"var(--false)",t:"No national election accepts votes by text message. This is a known voter-suppression pattern seen before elections.",m:["Source: electoral law and commission FAQ","Pattern seen in 3 languages","Appeal this verdict"]},
- {c:"Romania's Constitutional Court annulled the 2024 presidential election.",v:"TRUE",col:"var(--true)",t:"On 6 December 2024 the Court annulled the election, citing declassified intelligence reports, including about 25,000 TikTok accounts that allegedly boosted one candidate.",m:["Primary: Constitutional Court of Romania, ruling of 6 December 2024",{label:"PISM Spotlight 82/2024",url:"https://www.pism.pl/publications/constitutional-court-nullifies-romanias-presidential-election"},{label:"Lawfare: declassified intelligence and TikTok accounts",url:"https://www.lawfaremedia.org/article/romania--foreign-election-interference--and-a-dangerous-u.s.-retreat"}]},
- {c:"Meta has stopped fact-checking everywhere in the world.",v:"MISLEADING",col:"var(--terra)",t:"Meta ended its third-party fact-checking programme in the United States in April 2025. The post overstates it as worldwide.",m:[{label:"Meta Newsroom: More Speech and Fewer Mistakes, 7 Jan 2025",url:"https://about.fb.com/news/2025/01/meta-more-speech-fewer-mistakes/"},{label:"The Hill: US programme ends 7 April 2025",url:"https://thehill.com/policy/technology/5233142-meta-fact-checking-program-to-officially-end-monday/"},"Context added, nothing removed"]}
+ {c:"Romania's Constitutional Court annulled the 2024 presidential election.",v:"TRUE",col:"var(--true)",t:"On 6 December 2024 the Court annulled the election, citing declassified intelligence reports, including about 25,000 TikTok accounts that allegedly boosted one candidate.",m:["Primary: Constitutional Court of Romania, ruling of 6 December 2024",{label:"PISM Spotlight 82/2024",url:"https://www.pism.pl/publications/constitutional-court-nullifies-romanias-presidential-election"},{label:"Lawfare: declassified intelligence and TikTok accounts (calls the court a “Supreme Court”; it was the Constitutional Court)",url:"https://www.lawfaremedia.org/article/romania--foreign-election-interference--and-a-dangerous-u.s.-retreat"}]},
+ {c:"Meta has stopped fact-checking everywhere in the world.",v:"MISLEADING",col:"var(--misleading)",t:"Meta ended its third-party fact-checking programme in the United States in April 2025. The post overstates it as worldwide.",m:[{label:"Meta Newsroom: More Speech and Fewer Mistakes, 7 Jan 2025",url:"https://about.fb.com/news/2025/01/meta-more-speech-fewer-mistakes/"},{label:"The Hill: US programme ends 7 April 2025",url:"https://thehill.com/policy/technology/5233142-meta-fact-checking-program-to-officially-end-monday/"},"Context added, nothing removed"]}
 ];
 const $=id=>document.getElementById(id);
 document.querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{$("claim").value=S[+b.dataset.i].c;run();}));
@@ -435,10 +444,11 @@ function setStatus(f,cls,msg){const el=f.querySelector(".status");el.className="
 async function submitForm(e){
   e.preventDefault();
   const f=e.currentTarget, btn=f.querySelector('button[type="submit"]');
+  if(f.dataset.busy)return;
   if(f.elements["_gotcha"].value){return;}
   if(!configured(FORM_ENDPOINT)){setStatus(f,"info","Test mode: sign-ups are not being saved yet.");return;}
   f.elements["submitted_at"].value=new Date().toISOString();
-  const label=btn.textContent; btn.disabled=true; btn.textContent=f.dataset.loading||"Joining…"; setStatus(f,"info","");
+  const label=btn.textContent; f.dataset.busy="1"; btn.disabled=true; btn.textContent=f.dataset.loading||"Joining…"; setStatus(f,"info","");
   try{
     const r=await fetch(FORM_ENDPOINT,{method:"POST",body:new FormData(f),headers:{Accept:"application/json"}});
     if(!r.ok)throw new Error("HTTP "+r.status);
@@ -448,7 +458,7 @@ async function submitForm(e){
     btn.disabled=false; btn.textContent=label;
     setStatus(f,"err","Something went wrong. Please try again or email us at "+TEAM_EMAIL+".");
     f.dispatchEvent(new CustomEvent("sl:failed",{bubbles:true}));
-  }
+  }finally{delete f.dataset.busy;}
 }
 document.querySelectorAll("form[data-form]").forEach(f=>f.addEventListener("submit",submitForm));
 

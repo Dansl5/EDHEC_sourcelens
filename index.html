@@ -384,6 +384,10 @@ function track(name){
 document.addEventListener("click",e=>{const t=e.target.closest("[data-track]");if(t)track(t.dataset.track);});
 document.addEventListener("sl:submitted",e=>track(e.target.dataset.successEvent));
 document.addEventListener("sl:failed",()=>track("waitlist-submit-error"));
+(function(){ /* one event per page view naming the landing channel, so GoatCounter can count unique visitors per link */
+  const src=(new URLSearchParams(location.search).get("utm_source")||"").toLowerCase().replace(/[^a-z0-9-]/g,"").slice(0,40);
+  if(src)track("landing-"+src);
+})();
 (function(){const v=document.querySelector("video");if(v)v.addEventListener("play",()=>track("video-play"),{once:true});})();
 const S=[
  {c:"Polling stations will close at 12:00 tomorrow. Vote early or lose your vote!",v:"FALSE",col:"var(--false)",t:"Polling stations stay open for the full hours on the official electoral schedule. The closing time in this post does not match it.",m:["Source: national electoral commission","Bot amplification flagged","Nothing deleted","Appeal this verdict"]},

@@ -37,7 +37,7 @@ While any value still contains `{{`, the page is in **test mode**: forms do not 
 
 ## Tracked events (GoatCounter)
 
-`cta-hero-waitlist`, `cta-hero-newsroom`, `demo-check`, `demo-chip-1` to `demo-chip-4`, `plan-click-citizen`, `plan-click-premium`, `plan-click-newsroom`, `plan-click-api`, `waitlist-submit-success`, `premium-submit-success`, `newsroom-pilot-submit`, `waitlist-submit-error` (any form), `video-play` (once per page view).
+`cta-hero-waitlist`, `cta-hero-newsroom`, `demo-check`, `demo-chip-1` to `demo-chip-4`, `plan-click-citizen`, `plan-click-premium`, `plan-click-newsroom`, `plan-click-api`, `waitlist-submit-success`, `premium-submit-success`, `newsroom-pilot-submit`, `waitlist-submit-error` (any form), `video-play` (once per page view), `landing-<utm_source>` (once per page view when the link carries `utm_source`, e.g. `landing-linkedin`).
 
 ## Experiment kit
 

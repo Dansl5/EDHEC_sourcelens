@@ -113,7 +113,13 @@ td.n{font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:700}
 form{display:flex;flex-direction:column;gap:10px}
 form input,form select{font:inherit;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
 form .btn{background:#c4693f;color:#fff}
-.thanks{font-weight:700;color:var(--true)}
+.thanks,.status.ok{font-weight:700;color:var(--true)}
+.status{min-height:1.4em;font-size:15px}
+.status.err{font-weight:700;color:var(--false)}
+.status.info{font-weight:600;color:var(--muted)}
+.privacy{font-size:13px;color:var(--muted)}
+.hp{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
+form .btn[disabled]{opacity:.65;cursor:default}
 footer{border-top:1px solid var(--line);padding-block:28px;font-size:14px;color:var(--muted)}
 footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
@@ -217,13 +223,22 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
         <h2>Be first to check before you share</h2>
         <p>Citizens join free. Newsrooms and platforms can apply for one of five pilot places before the next election.</p>
       </div>
-      <form id="wl">
+      <form id="wl" action="https://formspree.io/f/{{FORM_ID}}" method="POST" data-form="waitlist" data-success="You're on the list. We'll email you when your access opens." data-success-event="waitlist-submit-success">
         <label for="email" class="eyebrow" style="color:var(--muted)">Email</label>
-        <input id="email" type="email" required placeholder="you@example.com">
+        <input id="email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
         <label for="kind" class="eyebrow" style="color:var(--muted)">I am a</label>
-        <select id="kind"><option>Citizen (free)</option><option>Newsroom (pilot)</option><option>Platform or app (API)</option></select>
+        <select id="kind" name="kind"><option value="Citizen">Citizen (free)</option><option value="Newsroom">Newsroom (pilot)</option><option value="Platform">Platform or app (API)</option></select>
+        <input type="hidden" name="form_name" value="waitlist">
+        <input type="hidden" name="plan_interest" value="none">
+        <input type="hidden" name="utm_source" value="">
+        <input type="hidden" name="utm_medium" value="">
+        <input type="hidden" name="utm_campaign" value="">
+        <input type="hidden" name="page_variant" value="v2">
+        <input type="hidden" name="submitted_at" value="">
+        <div class="hp"><label for="hp-waitlist">Leave this empty</label><input id="hp-waitlist" type="text" name="_gotcha" tabindex="-1" autocomplete="off"></div>
         <button class="btn" type="submit">Join the waitlist</button>
-        <p class="thanks" id="thanks" hidden>You're on the list. We'll email you when your access opens.</p>
+        <p class="status" role="status" aria-live="polite"></p>
+        <p class="privacy">We use cookieless analytics and store only the email you give us, to contact you about access. To have your email removed, write to {{TEAM_EMAIL}}.</p>
       </form>
     </div>
   </section>
@@ -232,6 +247,10 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 <footer><div class="wrap"><span>SourceLens · a market answer to destabilizing disinformation, without state control of speech</span><span>EDHEC Foresight &amp; Strategic Design · Cohort B prototype</span><a href="advisory.html">War Game: security advisory (simulation)</a></div></footer>
 
 <script>
+const FORM_ENDPOINT="https://formspree.io/f/{{FORM_ID}}";
+const GOATCOUNTER_CODE="{{GOATCOUNTER_CODE}}";
+const TEAM_EMAIL="{{TEAM_EMAIL}}";
+const configured=v=>!v.includes("{{");
 const S=[
  {c:"Polling stations will close at 12:00 tomorrow. Vote early or lose your vote!",v:"FALSE",col:"var(--false)",t:"Polling stations stay open for the full hours on the official electoral schedule. The closing time in this post does not match it.",m:["Source: national electoral commission","Bot amplification flagged","Nothing deleted","Appeal this verdict"]},
  {c:"You can now vote by sending a text message with your candidate's name.",v:"FALSE",col:"var(--false)",t:"No national election accepts votes by text message. This is a known voter-suppression pattern seen before elections.",m:["Source: electoral law and commission FAQ","Pattern seen in 3 languages","Appeal this verdict"]},
@@ -260,7 +279,30 @@ function run(){
   },1450);
 }
 $("check").addEventListener("click",run);
-$("wl").addEventListener("submit",e=>{e.preventDefault();$("thanks").hidden=false;e.target.querySelector("button").disabled=true;});
+
+/* Forms: one handler for every form[data-form]. Unconfigured endpoint means test mode: nothing is sent, nothing claims success. */
+const params=new URLSearchParams(location.search);
+document.querySelectorAll('input[name^="utm_"]').forEach(i=>{i.value=(params.get(i.name)||"").slice(0,100);});
+function setStatus(f,cls,msg){const el=f.querySelector(".status");el.className="status "+cls;el.textContent=msg;}
+async function submitForm(e){
+  e.preventDefault();
+  const f=e.currentTarget, btn=f.querySelector('button[type="submit"]');
+  if(f.elements["_gotcha"].value){return;}
+  if(!configured(FORM_ENDPOINT)){setStatus(f,"info","Test mode: sign-ups are not being saved yet.");return;}
+  f.elements["submitted_at"].value=new Date().toISOString();
+  const label=btn.textContent; btn.disabled=true; btn.textContent=f.dataset.loading||"Joining…"; setStatus(f,"info","");
+  try{
+    const r=await fetch(FORM_ENDPOINT,{method:"POST",body:new FormData(f),headers:{Accept:"application/json"}});
+    if(!r.ok)throw new Error("HTTP "+r.status);
+    setStatus(f,"ok",f.dataset.success); btn.textContent="Done";
+    f.dispatchEvent(new CustomEvent("sl:submitted",{bubbles:true}));
+  }catch(err){
+    btn.disabled=false; btn.textContent=label;
+    setStatus(f,"err","Something went wrong. Please try again or email us at "+TEAM_EMAIL+".");
+    f.dispatchEvent(new CustomEvent("sl:failed",{bubbles:true}));
+  }
+}
+document.querySelectorAll("form[data-form]").forEach(f=>f.addEventListener("submit",submitForm));
 </script>
 </body>
 </html>

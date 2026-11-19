@@ -406,7 +406,7 @@ function run(){
   setTimeout(()=>{
     if(r){$("vlabel").textContent=r.v;$("vh").style.background=r.col;$("vtext").textContent=r.t;renderMeta(r.m);}
     else{$("vlabel").textContent="NOT YET VERIFIED";$("vh").style.background="var(--muted)";$("vtext").textContent="No sourced verdict exists for this claim yet. In the full product it goes to our fact-checking partners and you get notified.";renderMeta(["Sent to partner review","Nothing deleted"]);}
-    $("vtime").textContent="checked in "+(1.8+Math.random()*1.2).toFixed(1)+" s";
+    $("vtime").textContent="Illustrative verdict · demo";
     $("out").hidden=false;
   },1450);
 }

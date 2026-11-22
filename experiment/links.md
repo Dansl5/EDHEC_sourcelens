@@ -1,6 +1,6 @@
 # Tracking links
 
-One link per channel. Each team member posts **only their own channel's link**, so every visit and sign-up can be traced to a channel. The page reads `utm_source`, `utm_medium` and `utm_campaign` and stores them with each form submission; it also fires a `landing-<utm_source>` event in GoatCounter.
+One link per channel. Each team member posts **only their own channel's link**, so every visit and sign-up can be traced to a channel. The page fires a `landing-<utm_source>` event in GoatCounter, and sign-ups are attributed to the channel of the same session.
 
 | Channel | Link | Owner |
 |---|---|---|
@@ -10,6 +10,7 @@ One link per channel. Each team member posts **only their own channel's link**, 
 | edhec-cohort | https://dansl5.github.io/EDHEC_sourcelens/?utm_source=edhec-cohort&utm_medium=community&utm_campaign=hw2 | {{TODO: channel owner}} |
 | newsroom-outreach | https://dansl5.github.io/EDHEC_sourcelens/?utm_source=newsroom-outreach&utm_medium=email&utm_campaign=hw2#newsrooms | {{TODO: channel owner}} |
 | qr-hallway | https://dansl5.github.io/EDHEC_sourcelens/?utm_source=qr-hallway&utm_medium=print&utm_campaign=hw2 | {{TODO: channel owner}} |
+| test | https://dansl5.github.io/EDHEC_sourcelens/?utm_source=test | everyone, for checks |
 
 ## QR code for hallway tests
 
@@ -23,4 +24,4 @@ Before opening the page yourself, run this once per browser in the developer con
 
 `localStorage.setItem('skipgc', 't')`
 
-Test submissions are removed by `analyze.py` (email contains "test", `utm_source=test`, or listed in `experiment/exclude.txt`).
+Test visits use the `test` link above; `analyze.py` drops every session in the `landing-test` channel.

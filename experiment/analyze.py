@@ -1,21 +1,30 @@
 #!/usr/bin/env python3
 """SourceLens experiment analysis (standard library only).
 
-Inputs (never commit these; they contain emails and live in experiment/data/, which is git-ignored):
-  --goatcounter  GoatCounter CSV export (page views and events)
-  --forms        Formspree CSV export
+Inputs (never commit these; raw exports live in experiment/data/, which is git-ignored):
+  --goatcounter  GoatCounter CSV export (page views and events). Required.
+  --forms        Optional legacy Formspree CSV export. Not needed for the current page.
+
+The page's forms are count-only: nothing is sent or stored, and no emails are collected. A valid submit
+fires one GoatCounter event per form per browser session, so sign-ups are counted from events:
+  waitlist-submit-success -> waitlist, premium-submit-success -> Premium priority list,
+  newsroom-pilot-submit -> newsroom pilot requests.
+Without --forms these counts come from the GoatCounter sessions that fired each event.
+
+Exclusions: team browsers are skipped at source by GoatCounter's skipgc setting
+(localStorage.setItem('skipgc','t')). Test visits use ?utm_source=test, which fires `landing-test`;
+every session in that channel is dropped here.
 
 Example:
-  python3 experiment/analyze.py --goatcounter experiment/data/goatcounter.csv \
-      --forms experiment/data/formspree.csv --contacted 20 --positive <count>   # omit --positive until outreach is counted
+  python3 experiment/analyze.py --goatcounter experiment/data/goatcounter.csv --contacted 20 --positive <count>   # omit --positive until outreach is counted
 
 Outputs: a funnel table by channel (markdown) with 95% Wilson intervals, experiment/funnel.svg,
 and PASS/FAIL for each pre-set threshold. Rates are computed at full precision and only
 formatted for display.
 
 Channel attribution: the page fires a `landing-<utm_source>` event once per page view when the link has
-utm_source. Other events are attributed to the channel of the same GoatCounter session. Form rows carry
-utm_source in a hidden field. Anything without a channel is reported as "(unattributed)".
+utm_source. Other events are attributed to the channel of the same GoatCounter session. (Legacy form rows carry
+utm_source in a hidden field.) Anything without a channel is reported as "(unattributed)".
 """
 import argparse
 import csv
@@ -138,11 +147,19 @@ def analyse(gc_rows, form_rows, excludes):
                 channels[chan(s)]["plan_click"].add(s)
                 tier = name[len("plan-click-"):]
                 channels[chan(s)]["plan_" + tier].add(s)
-    # ---- Forms ----
+            if name == "waitlist-submit-success":
+                channels[chan(s)]["wl"].add(s)
+            if name == "premium-submit-success":
+                channels[chan(s)]["pp"].add(s)
+            if name == "newsroom-pilot-submit":
+                channels[chan(s)]["pil"].add(s)
+    # Drop test sessions (landing-test) entirely.
+    channels.pop("test", None)
+    # ---- Forms (legacy Formspree export; empty when --forms is absent) ----
     seen = set()
     forms = defaultdict(lambda: defaultdict(int))
     dropped = 0
-    for r in form_rows:
+    for r in form_rows or []:
         email = first(r, "email")
         src = re.sub(r"[^a-z0-9-]", "", first(r, "utm_source").lower())[:40] or "(unattributed)"
         if excluded(email, src, excludes):
@@ -158,7 +175,7 @@ def analyse(gc_rows, form_rows, excludes):
     return channels, forms, dropped, sessions_all, ev_sessions
 
 
-def build_table(channels, forms):
+def build_table(channels, forms, from_events=False):
     names = sorted(set(channels) | set(forms), key=lambda c: (c.startswith("("), c))
     lines = ["| Channel | Unique visitors | Used demo | Clicked a plan | Premium click | Waitlist sign-ups | Premium priority list | Newsroom pilot requests |",
              "|---|---|---|---|---|---|---|---|"]
@@ -168,9 +185,14 @@ def build_table(channels, forms):
         d = len(channels[c]["demo"]) if c in channels else 0
         pc = len(channels[c]["plan_click"]) if c in channels else 0
         pr = len(channels[c]["plan_premium"]) if c in channels else 0
-        wl = forms[c]["waitlist"] if c in forms else 0
-        pp = forms[c]["premium"] if c in forms else 0
-        pil = forms[c]["newsroom-pilot"] if c in forms else 0
+        if from_events:
+            wl = len(channels[c]["wl"]) if c in channels else 0
+            pp = len(channels[c]["pp"]) if c in channels else 0
+            pil = len(channels[c]["pil"]) if c in channels else 0
+        else:
+            wl = forms[c]["waitlist"] if c in forms else 0
+            pp = forms[c]["premium"] if c in forms else 0
+            pil = forms[c]["newsroom-pilot"] if c in forms else 0
         for k, x in (("v", v), ("d", d), ("pc", pc), ("pr", pr), ("wl", wl), ("pp", pp), ("pil", pil)):
             tot[k] += x
         lines.append(f"| {c} | {v} | {rate_str(d, v)} | {rate_str(pc, v)} | {rate_str(pr, v)} | {rate_str(wl, v)} | {rate_str(pp, v)} | {pil} |")
@@ -205,7 +227,7 @@ def funnel_svg(tot, path):
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--goatcounter", required=True)
-    ap.add_argument("--forms", required=True)
+    ap.add_argument("--forms", default=None, help="optional legacy Formspree CSV; omit to count sign-ups from GoatCounter events")
     here = os.path.dirname(os.path.abspath(__file__))
     ap.add_argument("--exclude", default=os.path.join(here, "exclude.txt"), help="one email or substring per line (git-ignored)")
     ap.add_argument("--svg", default=os.path.join(here, "funnel.svg"))
@@ -216,12 +238,15 @@ def main(argv=None):
     ap.add_argument("--positive", type=int, default=None, help="organisations that replied positively or booked a call (manual count)")
     a = ap.parse_args(argv)
 
-    if not os.path.exists(a.exclude):
+    if a.forms and not os.path.exists(a.exclude):
         print(f"WARNING: exclude file not found ({a.exclude}); team emails are NOT removed beyond the 'test' rule.", file=sys.stderr)
-    channels, forms, dropped, sessions_all, ev = analyse(read_csv(a.goatcounter), read_csv(a.forms), load_excludes(a.exclude))
-    table, tot = build_table(channels, forms)
+    channels, forms, dropped, sessions_all, ev = analyse(read_csv(a.goatcounter), read_csv(a.forms) if a.forms else None, load_excludes(a.exclude))
+    table, tot = build_table(channels, forms, from_events=a.forms is None)
     print(table)
-    print(f"\nForm rows removed (test, excluded, duplicate): {dropped}")
+    if a.forms:
+        print(f"\nForm rows removed (test, excluded, duplicate): {dropped}")
+    else:
+        print("\nSign-ups counted from GoatCounter events (one per form per browser session); sessions from channel 'test' excluded.")
     print("Intervals are 95% Wilson [low, high]. Visitors are unique GoatCounter sessions (bots excluded).")
     funnel_svg(tot, a.svg)
     print(f"Funnel chart written to {a.svg}")

@@ -13,7 +13,7 @@
 Thresholds are proposed, {{TODO: team to confirm before 20 Nov}}.
 
 ## 3. Method
-Fake-door and waitlist test on the live page; six channels (linkedin, whatsapp, instagram, edhec-cohort, newsroom-outreach, qr-hallway), each with its own tracking link; 6–8 hallway tests. A unique visitor is one GoatCounter session; team visits, tests and duplicate emails are excluded. Premium says "not live yet" and takes no payment.
+Fake-door and waitlist test on the live page; six channels (linkedin, whatsapp, instagram, edhec-cohort, newsroom-outreach, qr-hallway), each with its own tracking link; 6–8 hallway tests. A unique visitor is one GoatCounter session. Sign-ups are counted as one analytics event per form per browser session; no emails are collected. Team browsers are excluded with GoatCounter's skipgc setting; test visits use utm_source=test. Premium says "not live yet" and takes no payment.
 
 ## 4. Pass/fail rule (written before any data)
 **Metric that matters: share of unique visitors who join the waitlist (T1).** A threshold passes if the observed rate meets it; 95% Wilson intervals are shown. **Persevere:** T1 passes and T2 or T3 passes. **Adjust offer and price:** T1 passes, T2 and T3 fail. **Refocus on newsrooms:** T1 fails, T3 passes. **Pivot to platforms (API):** T1 and T3 fail.

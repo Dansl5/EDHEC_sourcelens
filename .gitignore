@@ -1,3 +1,6 @@
 experiment/data/
 experiment/exclude.txt
 .DS_Store
+worker/.dev.vars
+worker/node_modules/
+worker/.wrangler/

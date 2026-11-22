@@ -205,7 +205,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
             <div class="meta" id="vmeta"></div>
           </div>
         </div>
-        <p class="note">Prototype demo with four sample claims. Verdicts are illustrative, not live fact-checks.</p>
+        <p class="note">Prototype demo. The four sample claims have illustrative verdicts. Verdicts for text you paste are AI-generated from web sources and can be wrong: check the sources before you share.</p>
+        <p class="note">Text you paste is sent to our checker and to Google's Gemini API, with Google Search, to produce the verdict. We do not store it; Google may retain it under its API terms. Do not paste personal data.</p>
       </div>
     </div>
   </div>
@@ -373,6 +374,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 const FORM_ENDPOINT="https://formspree.io/f/{{FORM_ID}}";
 const GOATCOUNTER_CODE="{{GOATCOUNTER_CODE}}";
 const TEAM_EMAIL="{{TEAM_EMAIL}}";
+const CHECK_ENDPOINT="https://sourcelens-check.sourcelens-team11.workers.dev/check"; /* Cloudflare Worker, see worker/README.md. Unset = canned demo only */
 const configured=v=>!v.includes("{{");
 
 /* Analytics: GoatCounter (cookieless). Loaded only when a site code is set; track() never throws and is a no-op if blocked. */
@@ -424,16 +426,43 @@ function renderMeta(items){
     box.appendChild(el);
   });
 }
+const LIVE={TRUE:["TRUE","var(--true)"],FALSE:["FALSE","var(--false)"],MISLEADING:["MISLEADING","var(--misleading)"],NOT_YET_VERIFIED:["NOT YET VERIFIED","var(--muted)"]};
+function show(label,col,text,meta,time){
+  $("vlabel").textContent=label;$("vh").style.background=col;$("vtext").textContent=text;renderMeta(meta);
+  $("vtime").textContent=time;$("out").hidden=false;
+}
+function showCanned(r){
+  if(r)show(r.v,r.col,r.t,r.m,"Illustrative verdict · demo");
+  else show("NOT YET VERIFIED","var(--muted)","No sourced verdict exists for this claim yet. In the full product it goes to our fact-checking partners and you get notified.",["Sent to partner review","Nothing deleted"],"Illustrative verdict · demo");
+}
+let runId=0;
+async function runLive(txt,id){
+  const ctl=new AbortController(), timer=setTimeout(()=>ctl.abort(),15000);
+  try{
+    const res=await fetch(CHECK_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({claim:txt}),signal:ctl.signal});
+    if(id!==runId)return;
+    if(!res.ok){
+      const msg=res.status===429?"The checker is busy right now. Please try again in a minute.":res.status===400?"Please paste a short claim (up to 600 characters).":"The checker is unavailable right now. Please try again later.";
+      show("NOT YET VERIFIED","var(--muted)",msg,["Nothing deleted"],"No verdict");return;
+    }
+    const d=await res.json(), v=LIVE[d.verdict]||LIVE.NOT_YET_VERIFIED;
+    const meta=(d.sources||[]).filter(s=>/^https?:\/\//.test(s.url)).map(s=>({label:s.label,url:s.url}));
+    meta.push("AI-generated, can be wrong");
+    show(v[0],v[1],d.summary||"No reliable source could be found for this claim.",meta,"AI-generated · verify before sharing");
+  }catch(e){
+    if(id===runId)show("NOT YET VERIFIED","var(--muted)","The checker is unavailable right now. Please try again later.",["Nothing deleted"],"No verdict");
+  }finally{clearTimeout(timer);if(id===runId)$("check").disabled=false;}
+}
 function run(){
-  const r=pick($("claim").value);
+  const txt=$("claim").value.trim(), id=++runId;
+  const sample=S.find(s=>s.c===txt);
   $("out").hidden=true; $("bar").style.width="0";
   requestAnimationFrame(()=>{$("bar").style.width="100%";});
-  setTimeout(()=>{
-    if(r){$("vlabel").textContent=r.v;$("vh").style.background=r.col;$("vtext").textContent=r.t;renderMeta(r.m);}
-    else{$("vlabel").textContent="NOT YET VERIFIED";$("vh").style.background="var(--muted)";$("vtext").textContent="No sourced verdict exists for this claim yet. In the full product it goes to our fact-checking partners and you get notified.";renderMeta(["Sent to partner review","Nothing deleted"]);}
-    $("vtime").textContent="Illustrative verdict · demo";
-    $("out").hidden=false;
-  },1450);
+  if(!sample&&txt&&configured(CHECK_ENDPOINT)){
+    track("demo-check-live"); $("check").disabled=true; runLive(txt,id); return;
+  }
+  $("check").disabled=false;
+  setTimeout(()=>{if(id===runId)showCanned(sample||pick(txt));},1450);
 }
 $("check").addEventListener("click",run);
 

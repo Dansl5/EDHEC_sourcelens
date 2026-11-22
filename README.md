@@ -27,11 +27,11 @@ Edit the files and push to `main`; Pages redeploys in a minute or two. To test l
 
 | Constant | Placeholder | Meaning |
 |---|---|---|
-| `GOATCOUNTER_CODE` | `{{GOATCOUNTER_CODE}}` | GoatCounter site code |
+| `GOATCOUNTER_CODE` | `sourcelens` | GoatCounter site code (dashboard: https://sourcelens.goatcounter.com) |
 | `CHECK_ENDPOINT` | `https://sourcelens-check.sourcelens-team11.workers.dev/check` | URL of the deployed claim-check Worker. If it contained `{{`, the demo would use the curated sample verdicts only |
 | `TEAM_EMAIL` | `hello@sourcelens.eu` | Contact email, display only. There is no mailbox behind it (the domain has no mail records) |
 
-The forms are **count-only**: they never send or store anything. A valid submit fires one GoatCounter event per form per browser session, clears the fields and shows an honest prototype notice. While `GOATCOUNTER_CODE` still contains `{{` (set it to the site code), analytics is not loaded and no events, including sign-ups, are counted. Search the repo for `{{` before collecting data.
+The forms are **count-only**: they never send or store anything. A valid submit fires one GoatCounter event per form per browser session, clears the fields and shows an honest prototype notice. If `GOATCOUNTER_CODE` contained `{{`, analytics would not load and no events, including sign-ups, would be counted.
 
 ## Where data lives
 

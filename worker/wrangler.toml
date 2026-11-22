@@ -2,11 +2,11 @@ name = "sourcelens-check"
 main = "src/index.js"
 compatibility_date = "2025-01-01"
 
-# Per-IP rate limit: 10 checks per 60 seconds. Remove this block if your wrangler version rejects it;
+# Per-IP rate limit: 30 checks per 60 seconds (campus Wi-Fi and the class demo share one public IP). Remove this block if your wrangler version rejects it;
 # the Worker works without it (Gemini's own free quota is then the only cap).
 [[ratelimits]]
 name = "RL"
 namespace_id = "1001"
   [ratelimits.simple]
-  limit = 10
+  limit = 30
   period = 60

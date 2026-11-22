@@ -70,9 +70,9 @@ export default {
       generationConfig: { temperature: 0.2 },
     });
 
-    const ask = async () => {
+    const ask = async (start) => {
       let res;
-      for (let i = 0; i < MODELS.length; i++) {
+      for (let i = start; i < MODELS.length; i++) {
         try {
           res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODELS[i]}:generateContent`, {
             method: "POST",
@@ -84,6 +84,7 @@ export default {
         }
         if (!RETRY_STATUS.includes(res.status)) break;
       }
+      if (!res) return { err: json({ error: "upstream_unreachable" }, 502, origin) }; /* start >= MODELS.length */
       if (!res.ok) {
         let detail = "";
         try { detail = String(((await res.json()).error || {}).message || "").slice(0, 200); } catch { /* ignore */ }
@@ -110,8 +111,11 @@ export default {
       }
       return { cand, text, parsed, sources, chunks, model: data.modelVersion };
     };
-    let r = await ask();
-    if (!r.err && r.sources.length === 0) r = await ask(); /* model skipped the search: ask once more */
+    let r = await ask(0);
+    if (!r.err && r.sources.length === 0) { /* model skipped the search: ask once more, starting at the next model */
+      const r2 = await ask(1);
+      if (!r2.err) r = r2; /* if the retry itself fails, keep the first (unsourced) answer */
+    }
     if (r.err) return r.err;
     const { cand, text, parsed, sources, chunks } = r;
 

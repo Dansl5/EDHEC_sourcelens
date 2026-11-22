@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>SourceLens</title>
+<title>SourceLens: check political claims before you share</title>
 <meta name="description" content="SourceLens: know if a political post is true before you share it.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="SourceLens: know if it's true before you share it">
@@ -24,7 +24,7 @@
 /* Layout: one column, navy masthead band with the live checker as the hero, then video, benefits, pricing, launch plan */
 :root{
   --navy:#24324f; --ink:#1c2438; --paper:#f7f4ef; --card:#ffffff; --line:#e3ddd3;
-  --terra:#c4693f; --misleading:#a8552f; --focus:#24324f; --sage:#6f8a5c; --false:#b5452f; --true:#3f7a4f; --muted:#5d6579;
+  --terra:#a4532d; --misleading:#a8552f; --focus:#24324f; --sage:#6f8a5c; --false:#b5452f; --true:#3f7a4f; --muted:#5d6579;
   --band:#24324f; --bandfg:#f6f1ea; --cta-bg:#24324f; --cta-fg:#ffffff;
   --display:"Source Serif 4",Georgia,serif; --body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
 }
@@ -54,15 +54,16 @@ a{color:inherit}
 .nav a{font-weight:600;font-size:15px;text-decoration:none;opacity:.85}
 .nav .links{display:flex;gap:22px;flex-wrap:wrap}
 .menu-btn{display:none;font:inherit;font-weight:700;font-size:15px;background:transparent;color:inherit;border:1px solid rgba(246,241,234,.45);border-radius:10px;padding:8px 14px;cursor:pointer}
-.hero{display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:center;padding-block:40px 64px}
+.hero{display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:start;padding-block:40px 64px}
 .hero>*{min-width:0}
 .hero h1{font-size:clamp(38px,5.6vw,60px)}
 .hero .lede{font-size:20px;opacity:.88;max-width:34em;margin-top:18px}
 .hero .tag{display:inline-block;margin-top:22px;font-size:15px;border:1px solid rgba(246,241,234,.35);padding:6px 14px;border-radius:30px}
 .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
 .btn{font:inherit;font-weight:700;border:0;border-radius:10px;padding:13px 20px;cursor:pointer;text-decoration:none;display:inline-block}
-.btn.primary{background:#c4693f;color:#fff}
-.btn.ghost{background:transparent;color:inherit;border:1px solid rgba(246,241,234,.45)}
+.btn.primary{background:#a4532d;color:#fff}
+.b2b{margin-top:14px;font-size:15px;opacity:.9}
+.b2b a{font-weight:700;text-underline-offset:3px}
 .btn:focus-visible,.menu-btn:focus-visible,.nav a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
 .band .nav a:focus-visible,.band .menu-btn:focus-visible,.band .cta .btn:focus-visible{outline-color:#e0a07e}
 
@@ -73,13 +74,19 @@ a{color:inherit}
 .samples{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .chip{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:30px;padding:5px 12px;cursor:pointer}
 .demo .btn{margin-top:14px;width:100%;background:var(--navy);color:#fff}
-:root[data-theme="dark"] .demo .btn{background:#c4693f}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .demo .btn{background:#c4693f}}
+:root[data-theme="dark"] .demo .btn{background:#a4532d}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .demo .btn{background:#a4532d}}
 .scan{height:4px;border-radius:4px;background:var(--line);overflow:hidden;margin-top:14px}
 .scan i{display:block;height:100%;width:0;background:var(--terra);transition:width 1.4s ease}
+.scan.busy i{width:35%!important;animation:scan 1.1s ease-in-out infinite;transition:none}
+@keyframes scan{from{transform:translateX(-100%)}to{transform:translateX(290%)}}
+@media (prefers-reduced-motion:reduce){.scan.busy i{animation:none;width:100%!important;opacity:.5}}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .verdict{margin-top:14px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
 .vhead{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;color:var(--vhfg,#fff);font-weight:700;letter-spacing:.04em}
 .vhead small{font-weight:600;letter-spacing:0}
+.vhead{flex-wrap:wrap;gap:2px 12px}
+.vhead small{font-size:12.5px}
 .vbody{padding:12px 14px;display:flex;flex-direction:column;gap:8px;font-size:15px}
 .meta{display:flex;flex-wrap:wrap;gap:6px}
 .meta span,.meta a{font-size:12.5px;background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:3px 10px}
@@ -107,6 +114,7 @@ video{width:100%;max-width:100%;border-radius:14px;display:block;background:#1d2
 .plan .price small{font-family:var(--body);font-size:15px;font-weight:600;color:var(--muted)}
 .plan ul{margin:0;padding-left:18px;font-size:15px;display:flex;flex-direction:column;gap:4px}
 .plan .btn{margin-top:auto;text-align:center;background:var(--cta-bg);color:var(--cta-fg);padding:12px 14px}
+.plan .terms{font-size:13.5px;color:var(--muted);margin:0}
 .fine{font-size:14px;color:var(--muted);margin-top:16px}
 dialog{border:1px solid var(--line);border-radius:16px;padding:0;background:var(--card);color:var(--ink);width:min(440px,calc(100vw - 32px));box-shadow:0 24px 60px rgba(0,0,0,.35)}
 dialog::backdrop{background:rgba(10,14,24,.6)}
@@ -146,6 +154,7 @@ form .btn{background:var(--cta-bg);color:var(--cta-fg)}
 .status.err{font-weight:700;color:var(--false)}
 .status.info{font-weight:600;color:var(--muted)}
 .privacy{font-size:13px;color:var(--muted)}
+html:not(.js) form[data-form] button[type=submit]{display:none}
 .hp{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
 form .btn[disabled]{opacity:.65;cursor:default}
 footer{border-top:1px solid var(--line);padding-block:28px;font-size:14px;color:var(--muted)}
@@ -160,6 +169,9 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 }
 @media (max-width:520px){
   .plans{grid-template-columns:1fr}
+  .hero{padding-block:24px 48px;gap:32px}
+  .hero .lede{font-size:18px;margin-top:14px}
+  .hero .tag{font-size:13.5px}
   .js .menu-btn{display:inline-block}
   .nav .links{flex-direction:column;gap:0;width:100%}
   .js .nav .links{display:none}
@@ -176,28 +188,31 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <nav class="nav">
       <div class="logo">Source<span>Lens</span></div>
       <button class="menu-btn" type="button" aria-expanded="false" aria-controls="navlinks">Menu</button>
-      <div class="links" id="navlinks"><a href="#demo">Demo</a><a href="#video">Video</a><a href="#pricing">Pricing</a><a href="#newsrooms">Newsrooms</a><a href="#waitlist">Waitlist</a></div>
+      <div class="links" id="navlinks"><a href="#demo">Demo</a><a href="#video">Video</a><a href="#pricing">Pricing</a><a href="#waitlist">Waitlist</a><a href="#newsrooms">Newsrooms</a></div>
     </nav>
     <div class="hero">
       <div>
         <div class="eyebrow" style="color:#e0a07e">Shazam for political claims</div>
         <h1 style="margin-top:12px">Know if it's true before you share it.</h1>
-        <p class="lede">Paste a post, link or screenshot. SourceLens gives you a verdict in seconds, with the original source. Nothing is deleted and nobody decides what you may read.</p>
-        <div class="cta"><a class="btn primary" href="#waitlist" data-track="cta-hero-waitlist">Join the free waitlist</a><a class="btn ghost" href="#newsrooms" data-track="cta-hero-newsroom" data-plan="newsroom-pilot" data-form="pilot" data-kind="Newsroom">Newsroom pilots</a></div>
-        <span class="tag">Independent · No government or party funding · Published method</span>
+        <p class="lede">Paste a post or claim. SourceLens checks it against web sources in seconds and shows you where the answer comes from. Nothing is deleted and nobody decides what you may read.</p>
+        <div class="cta"><a class="btn primary" href="#waitlist" data-track="cta-hero-waitlist">Join the free waitlist</a></div>
+        <p class="b2b">Newsroom or fact-checker? <a href="#newsrooms" data-track="cta-hero-newsroom" data-plan="newsroom-pilot" data-form="pilot" data-kind="Newsroom">Request a free pilot →</a></p>
+        <span class="tag">Independent · No government or party funding · <a href="method.html" style="color:inherit;text-underline-offset:3px">Published method</a></span>
       </div>
 
       <div class="demo" id="demo">
         <label for="claim">Try the checker</label>
-        <textarea id="claim">Polling stations will close at 12:00 tomorrow. Vote early or lose your vote!</textarea>
+        <textarea id="claim" maxlength="600">You can now vote in the French presidential election by sending a text message.</textarea>
+        <p class="note" id="vtip">Works best with one specific claim: who did what, and when.</p>
+        <p id="vhint" class="note" role="alert"></p>
         <div class="samples" aria-label="Sample claims">
-          <button class="chip" type="button" data-i="0" data-track="demo-chip-1">Polling hours</button>
-          <button class="chip" type="button" data-i="1" data-track="demo-chip-2">Vote by text</button>
-          <button class="chip" type="button" data-i="2" data-track="demo-chip-3">Romania 2024</button>
-          <button class="chip" type="button" data-i="3" data-track="demo-chip-4">Meta fact-checking</button>
+          <button class="chip" type="button" data-i="0" data-track="demo-chip-1">Vote by text</button>
+          <button class="chip" type="button" data-i="1" data-track="demo-chip-2">Romania 2024</button>
+          <button class="chip" type="button" data-i="2" data-track="demo-chip-3">Meta fact-checking</button>
         </div>
         <button class="btn" id="check" type="button" data-track="demo-check">Check this claim</button>
-        <div class="scan"><i id="bar"></i></div>
+        <div class="scan" id="scan"><i id="bar"></i></div>
+        <p id="vstatus" class="sr-only" aria-live="polite"></p>
         <div class="verdict" id="out" hidden>
           <div class="vhead" id="vh"><span id="vlabel"></span><small id="vtime"></small></div>
           <div class="vbody">
@@ -205,8 +220,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
             <div class="meta" id="vmeta"></div>
           </div>
         </div>
-        <p class="note">Prototype demo. The four sample claims have illustrative verdicts. Verdicts for text you paste are AI-generated from web sources and can be wrong: check the sources before you share.</p>
-        <p class="note">Text you paste is sent to our checker and to Google's Gemini API, with Google Search, to produce the verdict. We do not store it; Google may retain it under its API terms. Do not paste personal data.</p>
+        <p class="note">Sample chips show curated examples. Anything else you paste is checked live by AI against web sources and can be wrong: open the sources before you share.</p>
+        <p class="note">Pasted text goes to Google's Gemini API, with Google Search, to produce the verdict. We don't store it; Google may keep it under its API terms. Don't paste personal data. <a href="privacy.html">Privacy</a></p>
       </div>
     </div>
   </div>
@@ -229,12 +244,12 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
   <section style="padding-top:0">
     <div class="wrap">
-      <div class="eyebrow">Core benefits</div>
+      <div class="eyebrow">For people who share political news</div>
       <h2 style="margin-top:10px">Three things SourceLens does for you</h2>
       <div class="grid3">
-        <div class="benefit"><span class="pain">For: no time to verify</span><h3>Instant check</h3><p>Share a post, link or screenshot and get a verdict in seconds, with the original source attached.</p></div>
-        <div class="benefit"><span class="pain">For: fakes and bots</span><h3>Pre-share warning</h3><p>The browser extension warns you before you share a known false claim and flags bot amplification.</p></div>
-        <div class="benefit"><span class="pain">For: distrust</span><h3>Never censors</h3><p>Nothing is deleted. Every verdict is labelled, sourced and open to appeal, and our method is published.</p></div>
+        <div class="benefit"><span class="pain">For: no time to verify</span><h3>Instant check</h3><p>Paste a post and get a verdict in seconds, with its sources attached. Links and screenshots come with the app.</p></div>
+        <div class="benefit"><span class="pain">For: fakes that spread fast</span><h3>Pre-share warning</h3><p>With the browser extension, SourceLens warns you before you share a claim already rated false.</p></div>
+        <div class="benefit"><span class="pain">For: distrust</span><h3>Never censors</h3><p>Nothing is deleted. Every verdict is labelled, sourced and open to appeal. <a href="method.html">Read our method</a>.</p></div>
       </div>
     </div>
   </section>
@@ -244,12 +259,40 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       <div class="eyebrow">Pricing</div>
       <h2 style="margin-top:10px">Free for citizens. Organisations that verify at scale pay.</h2>
       <div class="plans">
-        <div class="plan"><span class="who">Citizens</span><div class="price">€0</div><ul><li>App and browser extension</li><li>Instant checks and pre-share warnings</li><li>Shareable verdict cards</li></ul><a class="btn" href="#waitlist" data-plan="citizen" data-form="wl" data-kind="Citizen" data-track="plan-click-citizen">Join free</a></div>
-        <div class="plan"><span class="who">Premium</span><div class="price">€3.99 <small>/ month</small></div><ul><li>30-day free trial</li><li>Unlimited checks and history</li><li>Exportable verification history</li></ul><button class="btn" type="button" id="open-premium" data-track="plan-click-premium">Start 30-day free trial</button></div>
-        <div class="plan feat"><span class="who">Newsrooms</span><div class="price">€300–1,000 <small>/ month</small></div><ul><li>Verification dashboard</li><li>Claim alerts for your region</li><li>Free concierge pilot first</li></ul><a class="btn" href="#newsrooms" data-plan="newsroom-pilot" data-form="pilot" data-kind="Newsroom" data-track="plan-click-newsroom">Request a free pilot</a></div>
-        <div class="plan"><span class="who">Platforms and apps</span><div class="price">API <small>per volume</small></div><ul><li>Same engine via API</li><li>Election monitoring package, fixed fee per election</li><li>Supports DSA risk work</li></ul><a class="btn" href="#newsrooms" data-plan="api" data-form="pilot" data-kind="Platform" data-track="plan-click-api">Talk to us about the API</a></div>
+        <div class="plan"><span class="who">Citizens</span><div class="price">€0</div><p class="terms">Free forever</p>
+          <ul><li>10 checks a day</li><li>Verdicts with their sources</li><li>Shareable verdict cards</li><li>App and browser extension at launch</li></ul>
+          <a class="btn" href="#waitlist" data-plan="citizen" data-form="wl" data-track="plan-click-citizen">Join free</a></div>
+        <div class="plan feat"><span class="who">Premium</span><div class="price">€3.99 <small>/ month</small></div><p class="terms">or €39.90 / year, 2 months free</p>
+          <ul><li>Unlimited checks</li><li>Full check history, exportable</li><li>Priority review of unverified claims</li><li>Everything in Citizens</li></ul>
+          <button class="btn" type="button" id="open-premium" data-track="plan-click-premium">Start 30-day free trial</button>
+          <p class="terms">No card needed for the trial. Cancel anytime.</p></div>
+        <div class="plan"><span class="who">Newsrooms</span><div class="price">€300 <small>/ month</small></div><p class="terms">Regional: 1 region, 3 seats</p>
+          <ul><li>National: €1,000 / month, all regions, 10 seats</li><li>Verification dashboard</li><li>Claim alerts for your region</li><li>Free concierge pilot first</li></ul>
+          <a class="btn" href="#newsrooms" data-plan="newsroom-pilot" data-form="pilot" data-kind="Newsroom" data-track="plan-click-newsroom">Request a free pilot</a></div>
+        <div class="plan"><span class="who">Platforms and apps</span><div class="price">€25 <small>/ 1,000 checks</small></div><p class="terms">Volume discounts above 1M checks</p>
+          <ul><li>Same engine via API</li><li>Election monitoring package from €15,000 per election</li><li>Supports DSA systemic-risk work</li></ul>
+          <a class="btn" href="#newsrooms" data-plan="api" data-form="pilot" data-kind="Platform" data-track="plan-click-api">Talk to us about the API</a></div>
       </div>
-      <p class="fine">Pilot pricing range — final price set with pilot partners. Prices are hypotheses we are testing with a Van Westendorp survey. Only 17% of people across 20 countries pay for online news (<a href="https://reutersinstitute.politics.ox.ac.uk/digital-news-report/2026/dnr-executive-summary" target="_blank" rel="noopener">Reuters Institute Digital News Report 2026</a>), so citizens stay free.</p>
+      <p class="fine">Consumer prices include VAT. Business prices exclude VAT, are billed monthly, and annual contracts are available. Citizens stay free: only 17% of people across 20 countries pay for online news (<a href="https://reutersinstitute.politics.ox.ac.uk/digital-news-report/2026/dnr-executive-summary" target="_blank" rel="noopener">Reuters Institute Digital News Report 2026</a>).</p>
+    </div>
+  </section>
+
+  <section id="waitlist" style="padding-top:0">
+    <div class="wrap wait">
+      <div class="stack">
+        <div class="eyebrow">Early access</div>
+        <h2>Be first to check before you share</h2>
+        <p>Join free and get early access to the SourceLens app and browser extension when they open in your country.</p>
+      </div>
+      <form id="wl" data-form="waitlist" data-success="You're on the list." data-success-event="waitlist-submit-success">
+        <label for="email" class="eyebrow" style="color:var(--muted)">Email</label>
+        <input id="email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
+        <input type="hidden" name="kind" value="Citizen">
+        <div class="hp"><label for="hp-waitlist">Leave this empty</label><input id="hp-waitlist" type="text" name="_gotcha" tabindex="-1" autocomplete="off"></div>
+        <button class="btn" type="submit">Join the waitlist</button><noscript><p class="privacy">Turn on JavaScript to sign up.</p></noscript>
+        <p class="status" role="status" aria-live="polite"></p>
+        <p class="privacy">We use cookieless analytics and never sell or share your data. Questions: <a href="mailto:hello@sourcelens.eu">hello@sourcelens.eu</a>. <a href="privacy.html">Privacy</a></p>
+      </form>
     </div>
   </section>
 
@@ -274,7 +317,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
           <p class="note">Five pilot places are open. The pilot is free; you decide afterwards whether to continue.</p>
         </div>
         <div class="pilotcard">
-          <form id="pilot" action="https://formspree.io/f/{{FORM_ID}}" method="POST" data-form="newsroom-pilot" data-loading="Sending…" data-success="Thanks. We'll contact you about a pilot place." data-success-event="newsroom-pilot-submit">
+          <form id="pilot" data-form="newsroom-pilot" data-loading="Sending…" data-success="Thanks, your pilot request is in." data-success-event="newsroom-pilot-submit">
             <label for="org" class="eyebrow" style="color:var(--muted)">Organisation name</label>
             <input id="org" name="organisation" type="text" required autocomplete="organization">
             <label for="role" class="eyebrow" style="color:var(--muted)">Your role</label>
@@ -287,93 +330,37 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
             <select id="okind" name="kind"><option value="Newsroom">Newsroom or fact-checker</option><option value="Platform">Platform or app (API)</option></select>
             <label for="pain" class="eyebrow" style="color:var(--muted)">Biggest verification pain (short)</label>
             <textarea id="pain" name="biggest_pain" maxlength="500"></textarea>
-        <input type="hidden" name="form_name" value="newsroom-pilot">
-        <input type="hidden" name="plan_interest" value="newsroom-pilot">
-        <input type="hidden" name="utm_source" value="">
-        <input type="hidden" name="utm_medium" value="">
-        <input type="hidden" name="utm_campaign" value="">
-        <input type="hidden" name="page_variant" value="v2">
-        <input type="hidden" name="submitted_at" value="">
         <div class="hp"><label for="hp-pilot">Leave this empty</label><input id="hp-pilot" type="text" name="_gotcha" tabindex="-1" autocomplete="off"></div>
-            <button class="btn" type="submit">Request a free pilot</button>
+            <button class="btn" type="submit">Request a free pilot</button><noscript><p class="privacy">Turn on JavaScript to sign up.</p></noscript>
             <p class="status" role="status" aria-live="polite"></p>
-            <p class="privacy">We use cookieless analytics and store only what you give us, to contact you about the pilot. To have your details removed, write to {{TEAM_EMAIL}}.</p>
+            <p class="privacy">We use cookieless analytics and never sell or share your data. Questions: <a href="mailto:hello@sourcelens.eu">hello@sourcelens.eu</a>. <a href="privacy.html">Privacy</a></p>
           </form>
         </div>
       </div>
     </div>
   </section>
-
-  <section id="decide" style="padding-top:0">
-    <div class="wrap">
-      <div class="eyebrow">How we'll decide</div>
-      <h2 style="margin-top:10px">Five newsroom pilots before the next election</h2>
-      <div class="goal">
-        <div><b>5</b><span>pilot places for newsrooms and fact-checkers</span></div>
-        <div><b>3 of 5</b><span>Target: pilots that convert to paid</span></div>
-        <div><b>2 of 5</b><span>Minimum to persevere. Below that we pivot to platforms via the API.</span></div>
-      </div>
-      <p class="fine">Our first test runs 20–22 Nov 2026. Results are in our experiment report.</p>
-    </div>
-  </section>
-
-  <section id="waitlist" style="padding-top:0">
-    <div class="wrap wait">
-      <div class="stack">
-        <div class="eyebrow">Early access</div>
-        <h2>Be first to check before you share</h2>
-        <p>Citizens join free. Newsrooms and platforms can apply for one of five pilot places before the next election.</p>
-      </div>
-      <form id="wl" action="https://formspree.io/f/{{FORM_ID}}" method="POST" data-form="waitlist" data-success="You're on the list. We'll email you when your access opens." data-success-event="waitlist-submit-success">
-        <label for="email" class="eyebrow" style="color:var(--muted)">Email</label>
-        <input id="email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
-        <label for="kind" class="eyebrow" style="color:var(--muted)">I am a</label>
-        <select id="kind" name="kind"><option value="Citizen">Citizen (free)</option><option value="Newsroom">Newsroom (pilot)</option><option value="Platform">Platform or app (API)</option></select>
-        <input type="hidden" name="form_name" value="waitlist">
-        <input type="hidden" name="plan_interest" value="none">
-        <input type="hidden" name="utm_source" value="">
-        <input type="hidden" name="utm_medium" value="">
-        <input type="hidden" name="utm_campaign" value="">
-        <input type="hidden" name="page_variant" value="v2">
-        <input type="hidden" name="submitted_at" value="">
-        <div class="hp"><label for="hp-waitlist">Leave this empty</label><input id="hp-waitlist" type="text" name="_gotcha" tabindex="-1" autocomplete="off"></div>
-        <button class="btn" type="submit">Join the waitlist</button>
-        <p class="status" role="status" aria-live="polite"></p>
-        <p class="privacy">We use cookieless analytics and store only the email you give us, to contact you about access. To have your email removed, write to {{TEAM_EMAIL}}.</p>
-      </form>
-    </div>
-  </section>
 </main>
 
-<footer><div class="wrap"><span>SourceLens · a market answer to destabilizing disinformation, without state control of speech</span><span>EDHEC Foresight &amp; Strategic Design · Cohort B prototype</span><a href="advisory.html">War Game: security advisory (simulation)</a></div></footer>
+<footer><div class="wrap"><span>© 2026 SourceLens · A student venture from EDHEC Business School</span><span class="flinks"><a href="method.html">Method</a> · <a href="method.html#appeals">Appeals</a> · <a href="privacy.html">Privacy</a> · <a href="mailto:hello@sourcelens.eu">hello@sourcelens.eu</a></span></div></footer>
 
 <dialog id="premium-dialog" aria-labelledby="pd-title">
   <div class="inner">
     <h3 id="pd-title">Premium isn't live yet</h3>
     <p>Join the priority list and get your free trial first. We don't ask for payment details and nothing is charged.</p>
-    <form data-form="premium" action="https://formspree.io/f/{{FORM_ID}}" method="POST" data-success="You're on the priority list. We'll email you when Premium opens." data-success-event="premium-submit-success">
+    <form data-form="premium" data-success="You're on the Premium priority list." data-success-event="premium-submit-success">
       <label for="pd-email" class="eyebrow" style="color:var(--muted)">Email</label>
       <input id="pd-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
-      <input type="hidden" name="kind" value="Citizen">
-      <input type="hidden" name="form_name" value="premium">
-      <input type="hidden" name="plan_interest" value="premium">
-      <input type="hidden" name="utm_source" value="">
-      <input type="hidden" name="utm_medium" value="">
-      <input type="hidden" name="utm_campaign" value="">
-      <input type="hidden" name="page_variant" value="v2">
-      <input type="hidden" name="submitted_at" value="">
       <div class="hp"><label for="hp-premium">Leave this empty</label><input id="hp-premium" type="text" name="_gotcha" tabindex="-1" autocomplete="off"></div>
-      <div class="row"><button class="btn" type="submit">Join the priority list</button><button class="btn quiet" type="button" data-close>Close</button></div>
+      <div class="row"><button class="btn" type="submit">Join the priority list</button><button class="btn quiet" type="button" data-close>Close</button><noscript><p class="privacy">Turn on JavaScript to sign up.</p></noscript></div>
       <p class="status" role="status" aria-live="polite"></p>
-      <p class="privacy">We use cookieless analytics and store only the email you give us, to contact you about access. To have your email removed, write to {{TEAM_EMAIL}}.</p>
+      <p class="privacy">We use cookieless analytics and never sell or share your data. Questions: <a href="mailto:hello@sourcelens.eu">hello@sourcelens.eu</a>. <a href="privacy.html">Privacy</a></p>
     </form>
   </div>
 </dialog>
 
 <script>
-const FORM_ENDPOINT="https://formspree.io/f/{{FORM_ID}}";
 const GOATCOUNTER_CODE="{{GOATCOUNTER_CODE}}";
-const TEAM_EMAIL="{{TEAM_EMAIL}}";
+const TEAM_EMAIL="hello@sourcelens.eu";
 const CHECK_ENDPOINT="https://sourcelens-check.sourcelens-team11.workers.dev/check"; /* Cloudflare Worker, see worker/README.md. Unset = canned demo only */
 const configured=v=>!v.includes("{{");
 
@@ -394,26 +381,24 @@ function track(name){
 }
 document.addEventListener("click",e=>{const t=e.target.closest("[data-track]");if(t)track(t.dataset.track);});
 document.addEventListener("sl:submitted",e=>track(e.target.dataset.successEvent));
-document.addEventListener("sl:failed",e=>track((e.target.dataset.form||"waitlist")+"-submit-error"));
 (function(){ /* one event per page view naming the landing channel, so GoatCounter can count unique visitors per link */
   const src=(new URLSearchParams(location.search).get("utm_source")||"").toLowerCase().replace(/[^a-z0-9-]/g,"").slice(0,40);
   if(src)track("landing-"+src);
 })();
 (function(){const v=document.querySelector("video");if(v)v.addEventListener("play",()=>track("video-play"),{once:true});})();
+const APPEAL={label:"Appeal this verdict",url:"method.html#appeals"};
 const S=[
- {c:"Polling stations will close at 12:00 tomorrow. Vote early or lose your vote!",v:"FALSE",col:"var(--false)",t:"Polling stations stay open for the full hours on the official electoral schedule. The closing time in this post does not match it.",m:["Source: national electoral commission","Bot amplification flagged","Nothing deleted","Appeal this verdict"]},
- {c:"You can now vote by sending a text message with your candidate's name.",v:"FALSE",col:"var(--false)",t:"No national election accepts votes by text message. This is a known voter-suppression pattern seen before elections.",m:["Source: electoral law and commission FAQ","Pattern seen in 3 languages","Appeal this verdict"]},
- {c:"Romania's Constitutional Court annulled the 2024 presidential election.",v:"TRUE",col:"var(--true)",t:"On 6 December 2024 the Court annulled the election, citing declassified intelligence reports, including about 25,000 TikTok accounts that allegedly boosted one candidate.",m:["Primary: Constitutional Court of Romania, ruling of 6 December 2024",{label:"PISM Spotlight 82/2024",url:"https://www.pism.pl/publications/constitutional-court-nullifies-romanias-presidential-election"},{label:"Lawfare: declassified intelligence on TikTok accounts",url:"https://www.lawfaremedia.org/article/romania--foreign-election-interference--and-a-dangerous-u.s.-retreat"}]},
- {c:"Meta has stopped fact-checking everywhere in the world.",v:"MISLEADING",col:"var(--misleading)",t:"Meta ended its third-party fact-checking programme in the United States in April 2025. The post overstates it as worldwide.",m:[{label:"Meta Newsroom: More Speech and Fewer Mistakes, 7 Jan 2025",url:"https://about.fb.com/news/2025/01/meta-more-speech-fewer-mistakes/"},{label:"The Hill: US programme ends 7 April 2025",url:"https://thehill.com/policy/technology/5233142-meta-fact-checking-program-to-officially-end-monday/"},"Context added, nothing removed"]}
+ {c:"You can now vote in the French presidential election by sending a text message.",v:"FALSE",col:"var(--false)",t:"In France you vote in person at your polling station or, if you cannot, by proxy (procuration). There is no voting by text message, and no online voting for the presidential election.",m:[{label:"Service-Public.fr: Vote par procuration",url:"https://www.service-public.gouv.fr/particuliers/vosdroits/F1604"},{label:"Service-Public.fr: Élection présidentielle",url:"https://www.service-public.gouv.fr/particuliers/vosdroits/F1940"},"Nothing deleted",APPEAL]},
+ {c:"Romania's Constitutional Court annulled the 2024 presidential election.",v:"TRUE",col:"var(--true)",t:"On 6 December 2024 the Court annulled the election, citing declassified intelligence reports, including about 25,000 TikTok accounts that allegedly boosted one candidate.",m:["Primary: Constitutional Court of Romania, ruling of 6 December 2024",{label:"PISM Spotlight 82/2024",url:"https://www.pism.pl/publications/constitutional-court-nullifies-romanias-presidential-election"},{label:"Lawfare: declassified intelligence on TikTok accounts",url:"https://www.lawfaremedia.org/article/romania--foreign-election-interference--and-a-dangerous-u.s.-retreat"},APPEAL]},
+ {c:"Meta has stopped fact-checking everywhere in the world.",v:"MISLEADING",col:"var(--misleading)",t:"Meta ended its third-party fact-checking programme in the United States in April 2025. The post overstates it as worldwide.",m:[{label:"Meta Newsroom: More Speech and Fewer Mistakes, 7 Jan 2025",url:"https://about.fb.com/news/2025/01/meta-more-speech-fewer-mistakes/"},{label:"The Hill: US programme ends 7 April 2025",url:"https://thehill.com/policy/technology/5233142-meta-fact-checking-program-to-officially-end-monday/"},"Context added, nothing removed",APPEAL]}
 ];
 const $=id=>document.getElementById(id);
 document.querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{$("claim").value=S[+b.dataset.i].c;run();}));
 function pick(txt){
   const s=txt.toLowerCase();
-  if(s.includes("text")||s.includes("sms"))return S[1];
-  if(s.includes("romania"))return S[2];
-  if(s.includes("meta")||s.includes("facebook"))return S[3];
-  if(s.includes("poll")||s.includes("close"))return S[0];
+  if(s.includes("text")||s.includes("sms"))return S[0];
+  if(s.includes("romania"))return S[1];
+  if(s.includes("meta")||s.includes("facebook"))return S[2];
   return null;
 }
 function renderMeta(items){
@@ -422,72 +407,87 @@ function renderMeta(items){
     const o=typeof x==="string"?{label:x}:x;
     const el=document.createElement(o.url?"a":"span");
     el.textContent=o.label;
-    if(o.url){el.href=o.url;el.target="_blank";el.rel="noopener";}
+    if(o.url){el.href=o.url;if(/^http/.test(o.url)){el.target="_blank";el.rel="noopener";}}
     box.appendChild(el);
   });
 }
 const LIVE={TRUE:["TRUE","var(--true)"],FALSE:["FALSE","var(--false)"],MISLEADING:["MISLEADING","var(--misleading)"],NOT_YET_VERIFIED:["NOT YET VERIFIED","var(--muted)"]};
 function show(label,col,text,meta,time){
   $("vlabel").textContent=label;$("vh").style.background=col;$("vtext").textContent=text;renderMeta(meta);
-  $("vtime").textContent=time;$("out").hidden=false;
+  $("vtime").textContent=time;$("out").hidden=false;$("vstatus").textContent="Verdict: "+label;
 }
 function showCanned(r){
-  if(r)show(r.v,r.col,r.t,r.m,"Illustrative verdict · demo");
-  else show("NOT YET VERIFIED","var(--muted)","No sourced verdict exists for this claim yet. In the full product it goes to our fact-checking partners and you get notified.",["Sent to partner review","Nothing deleted"],"Illustrative verdict · demo");
+  if(r)show(r.v,r.col,r.t,r.m,"Curated example");
+  else show("NOT YET VERIFIED","var(--muted)","No sourced verdict exists for this claim yet. In the full product it goes to our fact-checking partners and you get notified.",["Sent to partner review","Nothing deleted"],"Curated example");
 }
 let runId=0;
+const NOSRC="We couldn't confirm this with reliable sources yet. Try it as one specific claim (who did what, and when), or check back later: unverified claims go to our review queue.";
+function setBusy(on){
+  $("scan").classList.toggle("busy",on);
+  if(on)$("demo").setAttribute("aria-busy","true"); else $("demo").removeAttribute("aria-busy");
+  $("check").textContent=on?"Checking…":"Check this claim";
+}
 async function runLive(txt,id){
-  const ctl=new AbortController(), timer=setTimeout(()=>ctl.abort(),15000);
+  const ctl=new AbortController(), timer=setTimeout(()=>ctl.abort(),25000);
   try{
     const res=await fetch(CHECK_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({claim:txt}),signal:ctl.signal});
     if(id!==runId)return;
     if(!res.ok){
       const msg=res.status===429?"The checker is busy right now. Please try again in a minute.":res.status===400?"Please paste a short claim (up to 600 characters).":"The checker is unavailable right now. Please try again later.";
+      track("demo-live-error");
       show("NOT YET VERIFIED","var(--muted)",msg,["Nothing deleted"],"No verdict");return;
     }
     const d=await res.json(), v=LIVE[d.verdict]||LIVE.NOT_YET_VERIFIED;
+    track("demo-live-"+(LIVE[d.verdict]?d.verdict:"error").toLowerCase().replace(/_/g,"-"));
+    if(id!==runId)return;
     const meta=(d.sources||[]).filter(s=>/^https?:\/\//.test(s.url)).map(s=>({label:s.label,url:s.url}));
-    meta.push("AI-generated, can be wrong");
-    show(v[0],v[1],d.summary||"No reliable source could be found for this claim.",meta,"AI-generated · verify before sharing");
+    const noSrc=d.verdict==="NOT_YET_VERIFIED"&&(!d.summary||d.summary.startsWith("No reliable source"));
+    show(v[0],v[1],noSrc?NOSRC:(d.summary||NOSRC),meta,"AI-generated · verify before sharing");
   }catch(e){
-    if(id===runId)show("NOT YET VERIFIED","var(--muted)","The checker is unavailable right now. Please try again later.",["Nothing deleted"],"No verdict");
-  }finally{clearTimeout(timer);if(id===runId)$("check").disabled=false;}
+    track("demo-live-error");
+    if(id===runId){
+      const slow=e&&e.name==="AbortError";
+      show("NOT YET VERIFIED","var(--muted)",slow?"This one took too long. Try a shorter, more specific claim.":"The checker is unavailable right now. Please try again later.",["Nothing deleted"],"No verdict");
+    }
+  }finally{clearTimeout(timer);if(id===runId){setBusy(false);$("check").disabled=false;}}
 }
 function run(){
-  const txt=$("claim").value.trim(), id=++runId;
+  const txt=$("claim").value.trim(), hint=$("vhint");
+  hint.textContent="";
+  if(!txt){hint.textContent="Paste a claim to check first.";$("claim").focus();return;}
+  const id=++runId;
   const sample=S.find(s=>s.c===txt);
+  setBusy(false); $("vstatus").textContent="";
   $("out").hidden=true; $("bar").style.width="0";
   requestAnimationFrame(()=>{$("bar").style.width="100%";});
-  if(!sample&&txt&&configured(CHECK_ENDPOINT)){
-    track("demo-check-live"); $("check").disabled=true; runLive(txt,id); return;
+  if(!sample&&configured(CHECK_ENDPOINT)){
+    track("demo-check-live"); $("check").disabled=true; setBusy(true); $("vstatus").textContent="Checking the claim…"; runLive(txt,id); return;
   }
   $("check").disabled=false;
   setTimeout(()=>{if(id===runId)showCanned(sample||pick(txt));},1450);
 }
 $("check").addEventListener("click",run);
 
-/* Forms: one handler for every form[data-form]. Unconfigured endpoint means test mode: nothing is sent, nothing claims success. */
-const params=new URLSearchParams(location.search);
-document.querySelectorAll('input[name^="utm_"]').forEach(i=>{i.value=(params.get(i.name)||"").slice(0,100);});
+/* Forms: count-only prototype. Nothing is sent or stored. A valid submit records one analytics event per form per browser session. */
+const NOTICE="SourceLens is a prototype by a student team at EDHEC Business School, testing whether people want it: we have not stored your details and will not contact you.";
 function setStatus(f,cls,msg){const el=f.querySelector(".status");el.className="status "+cls;el.textContent=msg;}
-async function submitForm(e){
+function once(k){try{if(sessionStorage.getItem(k))return false;sessionStorage.setItem(k,"1");}catch(e){}return true;}
+function submitForm(e){
   e.preventDefault();
   const f=e.currentTarget, btn=f.querySelector('button[type="submit"]');
-  if(f.dataset.busy)return;
-  if(f.elements["_gotcha"].value){return;}
-  if(!configured(FORM_ENDPOINT)){setStatus(f,"info","Test mode: sign-ups are not being saved yet.");return;}
-  f.elements["submitted_at"].value=new Date().toISOString();
-  const label=btn.textContent; f.dataset.busy="1"; btn.disabled=true; btn.textContent=f.dataset.loading||"Joining…"; setStatus(f,"info","");
-  try{
-    const r=await fetch(FORM_ENDPOINT,{method:"POST",body:new FormData(f),headers:{Accept:"application/json"}});
-    if(!r.ok)throw new Error("HTTP "+r.status);
-    setStatus(f,"ok",f.dataset.success); btn.textContent="Done";
-    f.dispatchEvent(new CustomEvent("sl:submitted",{bubbles:true}));
-  }catch(err){
-    btn.disabled=false; btn.textContent=label;
-    setStatus(f,"err","Something went wrong. Please try again or email us at "+TEAM_EMAIL+".");
-    f.dispatchEvent(new CustomEvent("sl:failed",{bubbles:true}));
-  }finally{delete f.dataset.busy;}
+  if(f.dataset.busy||btn.disabled)return;
+  if(f.elements["_gotcha"]&&f.elements["_gotcha"].value)return;
+  f.dataset.busy="1"; btn.disabled=true; btn.textContent=f.dataset.loading||"Joining…"; setStatus(f,"info","");
+  setTimeout(()=>{
+    if(once("sl-"+f.dataset.form)){
+      f.dispatchEvent(new CustomEvent("sl:submitted",{bubbles:true}));
+      if(f.dataset.form==="newsroom-pilot"&&f.elements.kind)track("pilot-kind-"+f.elements.kind.value.toLowerCase());
+    }
+    f.querySelectorAll('input:not([type=hidden]),textarea').forEach(i=>{i.value="";});
+    btn.textContent="Done"; setStatus(f,"ok",f.dataset.success);
+    const n=document.createElement("p"); n.className="privacy"; n.textContent=NOTICE; f.querySelector(".status").after(n);
+    delete f.dataset.busy;
+  },700);
 }
 document.querySelectorAll("form[data-form]").forEach(f=>f.addEventListener("submit",submitForm));
 
@@ -503,9 +503,8 @@ document.querySelectorAll("form[data-form]").forEach(f=>f.addEventListener("subm
 /* Pricing CTAs. Plan buttons preselect the form they lead to. Premium is a fake door: an honest dialog, no payment fields. */
 document.querySelectorAll("[data-plan]").forEach(a=>a.addEventListener("click",()=>{
   const f=$(a.dataset.form); if(!f)return;
-  f.elements.plan_interest.value=a.dataset.plan;
-  if(a.dataset.kind&&f.elements.kind)f.elements.kind.value=a.dataset.kind;
-  setTimeout(()=>f.querySelector("input:not([type=hidden]):not([name=_gotcha]),select,textarea").focus({preventScroll:true}),400);
+  if(a.dataset.kind&&f.elements.kind&&f.elements.kind.tagName==="SELECT")f.elements.kind.value=a.dataset.kind;
+  setTimeout(()=>{const el=f.querySelector("input:not([type=hidden]):not([name=_gotcha]),select,textarea");if(el)el.focus({preventScroll:true});},400);
 }));
 const dlg=$("premium-dialog"); let opener=null;
 $("open-premium").addEventListener("click",e=>{opener=e.currentTarget;dlg.showModal();dlg.querySelector('input[type="email"]').focus();});

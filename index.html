@@ -422,6 +422,20 @@ function showCanned(r){
 }
 let runId=0;
 const NOSRC="We couldn't confirm this with reliable sources yet. Try it as one specific claim (who did what, and when), or check back later: unverified claims go to our review queue.";
+/* Free plan: 10 live checks a day per browser (curated chips are free). Prototype cap, kept in localStorage; it resets at local midnight. */
+const FREE_CHECKS=10;
+function today(){const d=new Date();return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();}
+function quota(){try{const q=JSON.parse(localStorage.getItem("sl-checks")||"{}");return q.d===today()?q.n:0;}catch(e){return 0;}}
+function useCheck(){const n=quota()+1;try{localStorage.setItem("sl-checks",JSON.stringify({d:today(),n}));}catch(e){}showLeft(n);}
+function showLeft(n){const left=Math.max(0,FREE_CHECKS-n);$("vtip").textContent=left+" of "+FREE_CHECKS+" free checks left today. Works best with one specific claim: who did what, and when.";}
+function showLimit(){
+  track("demo-limit-hit");
+  show("DAILY LIMIT REACHED","var(--terra)","You've used your "+FREE_CHECKS+" free checks for today. They reset at midnight. Premium gives you unlimited checks, free for 30 days.",[],"Free plan");
+  const b=document.createElement("button");b.type="button";b.className="chip";b.textContent="Try Premium free";b.dataset.track="demo-limit-premium";
+  b.addEventListener("click",e=>{opener=e.currentTarget;dlg.showModal();dlg.querySelector('input[type="email"]').focus();});
+  $("vmeta").appendChild(b);
+}
+if(quota()>0)showLeft(quota());
 function setBusy(on){
   $("scan").classList.toggle("busy",on);
   if(on)$("demo").setAttribute("aria-busy","true"); else $("demo").removeAttribute("aria-busy");
@@ -438,6 +452,7 @@ async function runLive(txt,id){
       show("NOT YET VERIFIED","var(--muted)",msg,["Nothing deleted"],"No verdict");return;
     }
     const d=await res.json(), v=LIVE[d.verdict]||LIVE.NOT_YET_VERIFIED;
+    useCheck();
     track("demo-live-"+(LIVE[d.verdict]?d.verdict:"error").toLowerCase().replace(/_/g,"-"));
     if(id!==runId)return;
     const meta=(d.sources||[]).filter(s=>/^https?:\/\//.test(s.url)).map(s=>({label:s.label,url:s.url}));
@@ -461,6 +476,7 @@ function run(){
   $("out").hidden=true; $("bar").style.width="0";
   requestAnimationFrame(()=>{$("bar").style.width="100%";});
   if(!sample&&configured(CHECK_ENDPOINT)){
+    if(quota()>=FREE_CHECKS){$("check").disabled=false;showLimit();return;}
     track("demo-check-live"); $("check").disabled=true; setBusy(true); $("vstatus").textContent="Checking the claim…"; runLive(txt,id); return;
   }
   $("check").disabled=false;

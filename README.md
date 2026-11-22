@@ -33,6 +33,10 @@ Edit the files and push to `main`; Pages redeploys in a minute or two. To test l
 
 The forms are **count-only**: they never send or store anything. A valid submit fires one GoatCounter event per form per browser session, clears the fields and shows an honest prototype notice. If `GOATCOUNTER_CODE` contained `{{`, analytics would not load and no events, including sign-ups, would be counted.
 
+## Free plan cap
+
+The live checker allows 10 checks a day per browser, matching the Citizens plan. The count is kept in the browser's `localStorage` (`sl-checks`) and resets at local midnight; curated sample chips don't count. It is a prototype cap, not security: the Worker's per-IP rate limit (30 a minute) protects the API. To reset your own count, run `localStorage.removeItem('sl-checks')` in the console.
+
 ## Where data lives
 
 - **Form submissions:** the forms store nothing and send nothing. Sign-ups are GoatCounter events (`waitlist-submit-success`, `premium-submit-success`, `newsroom-pilot-submit`); no emails are collected. A hidden `_gotcha` field is a bot trap.
@@ -43,7 +47,7 @@ The forms are **count-only**: they never send or store anything. A valid submit 
 
 ## Tracked events (GoatCounter)
 
-`cta-hero-waitlist`, `cta-hero-newsroom`, `demo-check`, `demo-check-live` (a pasted claim sent to the live checker), `demo-live-true`, `demo-live-false`, `demo-live-misleading`, `demo-live-not-yet-verified`, `demo-live-error` (the outcome of a pasted claim sent to the live checker), `demo-chip-1` to `demo-chip-3`, `plan-click-citizen`, `plan-click-premium`, `plan-click-newsroom`, `plan-click-api`, `pilot-kind-newsroom`, `pilot-kind-platform` (the "We are a" choice on a pilot request), `waitlist-submit-success`, `premium-submit-success`, `newsroom-pilot-submit`, `video-play` (once per page view), `landing-<utm_source>` (once per page view when the link carries `utm_source`, e.g. `landing-linkedin`; `landing-test` marks test visits).
+`cta-hero-waitlist`, `cta-hero-newsroom`, `demo-check`, `demo-check-live` (a pasted claim sent to the live checker), `demo-live-true`, `demo-live-false`, `demo-live-misleading`, `demo-live-not-yet-verified`, `demo-live-error` (the outcome of a pasted claim sent to the live checker), `demo-limit-hit` (a visitor reached the free plan's 10 live checks a day), `demo-limit-premium` (clicked "Try Premium free" on the limit message), `demo-chip-1` to `demo-chip-3`, `plan-click-citizen`, `plan-click-premium`, `plan-click-newsroom`, `plan-click-api`, `pilot-kind-newsroom`, `pilot-kind-platform` (the "We are a" choice on a pilot request), `waitlist-submit-success`, `premium-submit-success`, `newsroom-pilot-submit`, `video-play` (once per page view), `landing-<utm_source>` (once per page view when the link carries `utm_source`, e.g. `landing-linkedin`; `landing-test` marks test visits).
 
 ## Experiment kit
 

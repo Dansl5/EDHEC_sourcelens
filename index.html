@@ -97,7 +97,7 @@ a{color:inherit}
 /* video */
 .video{display:grid;grid-template-columns:1.4fr 1fr;gap:40px;align-items:center}
 .video>*{min-width:0}
-video{width:100%;max-width:100%;border-radius:14px;display:block;background:#1d2942;aspect-ratio:16/9}
+video{width:100%;max-width:100%;border-radius:14px;display:block;background:var(--card);aspect-ratio:16/9;border:1px solid var(--line);box-shadow:0 14px 40px rgba(28,36,56,.12)}
 
 /* benefits */
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:28px}
@@ -229,9 +229,9 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
 
 <main>
-  <section id="video" style="padding-top:0">
+  <section id="video">
     <div class="wrap video">
-      <video controls playsinline preload="metadata" poster="assets/video-poster.png?v=2" aria-label="SourceLens one-minute product walkthrough video">
+      <video controls playsinline preload="metadata" poster="assets/video-poster.png?v=3" aria-label="SourceLens one-minute product walkthrough video">
         <source src="assets/sourcelens-promo.mp4?v=3" type="video/mp4">
       </video>
       <div class="stack">
